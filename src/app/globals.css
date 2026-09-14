@@ -1,0 +1,135 @@
+@import "tailwindcss";
+
+:root {
+  /* Elayono Green — primary brand green, sampled from the logo's cross/bible/swoop */
+  --color-brand-50: #f0faf3;
+  --color-brand-100: #dcf3e3;
+  --color-brand-200: #b8e7c8;
+  --color-brand-300: #86d2a3;
+  --color-brand-400: #4fb877;
+  --color-brand-500: #239a54; /* primary CTA / interactive green */
+  --color-brand-600: #187c42; /* deep green — headings, secondary buttons */
+  --color-brand-700: #146536;
+  --color-brand-800: #124a29;
+  --color-brand-900: #0d331d; /* near-wordmark dark green */
+
+  /* Dark teal/green — sampled from the ELAYONO GLOBAL wordmark */
+  --color-ink: #0b2a1f;
+  --color-ink-soft: #24413584;
+
+  /* Neutrals — warm, sophisticated, support the green without competing */
+  --color-paper: #ffffff;
+  --color-sand: #faf9f5;
+  --color-mist: #f4f6f2;
+  --color-stone: #e7e9e2;
+  --color-line: #e1e4dc;
+  --color-slate: #5b6660;
+
+  --background: var(--color-paper);
+  --foreground: var(--color-ink);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-brand-50: var(--color-brand-50);
+  --color-brand-100: var(--color-brand-100);
+  --color-brand-200: var(--color-brand-200);
+  --color-brand-300: var(--color-brand-300);
+  --color-brand-400: var(--color-brand-400);
+  --color-brand-500: var(--color-brand-500);
+  --color-brand-600: var(--color-brand-600);
+  --color-brand-700: var(--color-brand-700);
+  --color-brand-800: var(--color-brand-800);
+  --color-brand-900: var(--color-brand-900);
+
+  --color-ink: var(--color-ink);
+  --color-paper: var(--color-paper);
+  --color-sand: var(--color-sand);
+  --color-mist: var(--color-mist);
+  --color-stone: var(--color-stone);
+  --color-line: var(--color-line);
+  --color-slate: var(--color-slate);
+
+  --font-sans: var(--font-body);
+  --font-display: var(--font-heading);
+
+  --animate-fade-up: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-fade-in: fade-in 0.8s ease-out both;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display), var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+::selection {
+  background: var(--color-brand-200);
+  color: var(--color-ink);
+}
+
+.container-elayono {
+  width: 100%;
+  max-width: 84rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .container-elayono {
+    padding-inline: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-elayono {
+    padding-inline: 3rem;
+  }
+}
+
+/* Subtle swoop-inspired divider, echoing the logo's ascending curve without repeating the mark */
+.swoop-divider {
+  position: relative;
+  overflow: hidden;
+}
+
+.swoop-divider::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 140% at 15% 0%, var(--color-brand-50) 0%, transparent 55%);
+  pointer-events: none;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
