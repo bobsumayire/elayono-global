@@ -9,6 +9,8 @@ export type EventItem = {
   category: "Conference" | "Service" | "Outreach" | "Prayer" | "Youth";
   summary: string;
   image: string;
+  /** Phone number (with country code, digits only) for WhatsApp registration/RSVP. */
+  whatsapp?: string;
 };
 
 /**
@@ -16,6 +18,19 @@ export type EventItem = {
  * homepage, Events page and altar pages read from this single source.
  */
 export const events: EventItem[] = [
+  {
+    slug: "injira-mu-gihe-cyawe-maine-2026",
+    title: "Injira Mugihe Cyawe (Edition 5)",
+    date: "2026-10-23",
+    endDate: "2026-10-25",
+    time: "1:00 PM - 9:00 PM daily",
+    location: "DoubleTree by Hilton, 363 Maine Mall Road, Portland, Maine, USA",
+    category: "Prayer",
+    summary:
+      "Get In Your Season — three days of prayer live in Maine, hosted by Rev. Prophet Ernest Nyirindekwe with worshipers Willy, Aime Frank and pianist Nzungu.",
+    image: "/events/injira-mugihe-cyawe-maine-2026.jpeg",
+    whatsapp: "12679399460",
+  },
   {
     slug: "global-prayer-conference-2026",
     title: "Elayono Global Prayer Conference",
