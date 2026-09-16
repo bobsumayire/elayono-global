@@ -47,6 +47,16 @@ export default function SermonsPage() {
               <SermonCard key={s.slug} sermon={s} />
             ))}
           </div>
+
+          <div className="flex justify-center">
+            <Button
+              href="https://www.youtube.com/@propheternestnyirindekwe715"
+              variant="ghost"
+              size="lg"
+            >
+              Watch More on YouTube
+            </Button>
+          </div>
         </div>
       </section>
     </>

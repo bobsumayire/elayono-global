@@ -4,7 +4,13 @@ import type { Sermon } from "@/data/sermons";
 export default function SermonCard({ sermon }: { sermon: Sermon }) {
   return (
     <article className="group flex flex-col overflow-hidden rounded-3xl border border-line bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-ink/5">
-      <div className="relative aspect-video w-full overflow-hidden">
+      <a
+        href={sermon.videoUrl ?? "#"}
+        target={sermon.videoUrl ? "_blank" : undefined}
+        rel={sermon.videoUrl ? "noopener noreferrer" : undefined}
+        className="relative aspect-video w-full overflow-hidden"
+        aria-label={`Watch ${sermon.title}`}
+      >
         <Image
           src={sermon.thumbnail}
           alt={sermon.title}
@@ -22,14 +28,27 @@ export default function SermonCard({ sermon }: { sermon: Sermon }) {
         <span className="absolute bottom-3 right-3 rounded-md bg-ink/80 px-2 py-0.5 text-[11px] font-semibold text-white">
           {sermon.duration}
         </span>
-      </div>
+      </a>
       <div className="flex flex-1 flex-col gap-2 p-5">
         {sermon.series && (
           <span className="text-[11px] font-semibold uppercase tracking-[0.15em] text-brand-500">
             {sermon.series}
           </span>
         )}
-        <h3 className="text-lg font-bold leading-snug text-ink">{sermon.title}</h3>
+        <h3 className="text-lg font-bold leading-snug text-ink">
+          {sermon.videoUrl ? (
+            <a
+              href={sermon.videoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="transition-colors hover:text-brand-600"
+            >
+              {sermon.title}
+            </a>
+          ) : (
+            sermon.title
+          )}
+        </h3>
         <p className="text-sm text-slate line-clamp-2">{sermon.summary}</p>
         <div className="mt-auto flex items-center justify-between pt-3 text-xs text-slate">
           <span>{sermon.speaker}</span>

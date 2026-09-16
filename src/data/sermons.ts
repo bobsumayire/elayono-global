@@ -11,81 +11,81 @@ export type Sermon = {
 };
 
 /**
- * Sample sermon library. Replace with real messages (and connect videoUrl to
- * your YouTube/Vimeo channel) as they become available — the Sermons and
- * Watch Live pages will pick up new entries automatically.
+ * Sermon library sourced from Rev Prophet Ernest NYIRINDEKWE's YouTube channel
+ * (youtube.com/@propheternestnyirindekwe715), favoring the international
+ * crusades and revivals with the best-designed thumbnails.
  */
 export const sermons: Sermon[] = [
   {
-    slug: "beyond-borders",
-    title: "Taking the Gospel Beyond Borders",
+    slug: "injira-mugihe-cyawe-paris",
+    title: "Injira Mugihe Cyawe — Live in Paris, France",
     speaker: "Rev Prophet Ernest NYIRINDEKWE",
-    series: "Global Mission",
-    date: "2026-08-30",
-    duration: "58 min",
+    series: "Injira Mugihe Cyawe",
+    date: "2026-07-10",
+    duration: "4h 40m",
     summary:
-      "A call to the global church to carry the Gospel with excellence, courage and love — reaching every nation Elayono touches.",
-    thumbnail:
-      "https://images.unsplash.com/photo-1477414348463-c0eb7f1359b6?q=80&w=1200&auto=format&fit=crop",
+      "Day One of the Paris crusade — a prophetic call to step into your season and carry the Gospel across the nations of Europe.",
+    thumbnail: "https://i.ytimg.com/vi/jMkv7VGMQhE/maxresdefault.jpg",
+    videoUrl: "https://www.youtube.com/watch?v=jMkv7VGMQhE",
   },
   {
-    slug: "faith-that-builds",
-    title: "Faith That Builds",
+    slug: "injira-mugihe-cyawe-sweden",
+    title: "Injira Mugihe Cyawe — Grand Finale in Sweden",
     speaker: "Rev Prophet Ernest NYIRINDEKWE",
-    series: "Foundations",
-    date: "2026-08-23",
-    duration: "51 min",
+    series: "Injira Mugihe Cyawe",
+    date: "2025-07-06",
+    duration: "6h 2m",
     summary:
-      "Understanding the kind of faith that doesn't just believe, but builds — families, communities and nations for the Kingdom.",
-    thumbnail:
-      "https://images.unsplash.com/photo-1544427920-c49ccfb85579?q=80&w=1200&auto=format&fit=crop",
+      "The Grand Finale of the Sweden crusade in Stockholm — a powerful close to a season of prosperity, prayer and prophetic impartation.",
+    thumbnail: "https://i.ytimg.com/vi/adurVRIbIYc/maxresdefault.jpg",
+    videoUrl: "https://www.youtube.com/watch?v=adurVRIbIYc",
   },
   {
-    slug: "a-generation-arising",
-    title: "A Generation Arising",
+    slug: "injira-mugihe-cyawe-montreal",
+    title: "Injira Mugihe Cyawe — Grand Finale in Montréal, Canada",
     speaker: "Rev Prophet Ernest NYIRINDEKWE",
-    series: "Foundations",
-    date: "2026-08-16",
-    duration: "47 min",
+    series: "Injira Mugihe Cyawe",
+    date: "2025-08-24",
+    duration: "9h 2m",
     summary:
-      "Raising a generation anchored in God's purpose — equipped, confident and ready to transform their world.",
-    thumbnail:
-      "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=1200&auto=format&fit=crop",
+      "Edition 3's Grand Finale in Montréal — celebrating Elayono's family in Canada with a full day of worship, teaching and testimony.",
+    thumbnail: "https://i.ytimg.com/vi/a9GtkL56_FI/maxresdefault.jpg",
+    videoUrl: "https://www.youtube.com/watch?v=a9GtkL56_FI",
   },
   {
-    slug: "one-family-one-faith",
-    title: "One Family, One Faith",
+    slug: "europe-revival-brussels",
+    title: "Europe Revival — Live in Brussels, Belgium",
     speaker: "Rev Prophet Ernest NYIRINDEKWE",
-    series: "Global Mission",
-    date: "2026-08-09",
-    duration: "55 min",
+    series: "Europe Revival",
+    date: "2025-10-26",
+    duration: "1h 43m",
     summary:
-      "What it means to belong to a global family united across nations, cultures and languages by one unshakeable faith.",
-    thumbnail:
-      "https://images.unsplash.com/photo-1508186225823-0963cf9ab0de?q=80&w=1200&auto=format&fit=crop",
+      "A Sunday revival service in Brussels calling the European church to a fresh outpouring and a bold, unashamed faith.",
+    thumbnail: "https://i.ytimg.com/vi/aFju4q4wKAM/maxresdefault.jpg",
+    videoUrl: "https://www.youtube.com/watch?v=aFju4q4wKAM",
   },
   {
-    slug: "the-open-heaven",
-    title: "The Open Heaven",
+    slug: "expand-your-boundaries-kampala-1",
+    title: "Expand Your Boundaries — Live in Kampala, Uganda",
     speaker: "Rev Prophet Ernest NYIRINDEKWE",
-    series: "Encounter",
-    date: "2026-08-02",
-    duration: "62 min",
+    series: "Expand Your Boundaries",
+    date: "2026-01-25",
+    duration: "2h 40m",
     summary:
-      "Living daily under an open heaven — walking in the presence, provision and power of God.",
-    thumbnail:
-      "https://images.unsplash.com/photo-1507692049790-de58290a4334?q=80&w=1200&auto=format&fit=crop",
+      "A special Sunday service in Kampala with Prophet Neza Mugisha, challenging believers to expand their boundaries and enlarge their vision.",
+    thumbnail: "https://i.ytimg.com/vi/NnXBB3XneZg/maxresdefault.jpg",
+    videoUrl: "https://www.youtube.com/watch?v=NnXBB3XneZg",
   },
   {
-    slug: "rooted-and-fruitful",
-    title: "Rooted and Fruitful",
+    slug: "expand-your-boundaries-kampala-2",
+    title: "Expand Your Boundaries — Special Service in Kampala, Uganda",
     speaker: "Rev Prophet Ernest NYIRINDEKWE",
-    series: "Encounter",
-    date: "2026-07-26",
-    duration: "49 min",
+    series: "Expand Your Boundaries",
+    date: "2026-01-28",
+    duration: "6h 17m",
     summary:
-      "A message on staying rooted in God's Word so that every season of life produces lasting fruit.",
-    thumbnail:
-      "https://images.unsplash.com/photo-1529070538774-1843cb3265df?q=80&w=1200&auto=format&fit=crop",
+      "The continuation of the Kampala crusade — a marathon of worship and prophetic teaching on enlarging your capacity for God's promises.",
+    thumbnail: "https://i.ytimg.com/vi/vqg5-PTpWnE/maxresdefault.jpg",
+    videoUrl: "https://www.youtube.com/watch?v=vqg5-PTpWnE",
   },
 ];
