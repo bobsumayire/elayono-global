@@ -63,7 +63,7 @@ export default function FounderPage() {
         description="Explore sermons and teachings from our founder, available to watch on demand."
         primary={{ label: "Watch Sermons", href: "/sermons" }}
         secondary={{ label: "Watch Live", href: "/watch-live" }}
-        image="https://images.unsplash.com/photo-1507692049790-de58290a4334?q=80&w=2000&auto=format&fit=crop"
+        image="/photos/cta-founder-sermons.jpg"
       />
     </>
   );

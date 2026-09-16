@@ -6,7 +6,7 @@ export default function Hero() {
   return (
     <section className="relative flex min-h-[92vh] items-center overflow-hidden bg-ink">
       <Image
-        src="https://images.unsplash.com/photo-1438032005730-c779502df39b?q=80&w=2400&auto=format&fit=crop"
+        src="/photos/hero-home.jpg"
         alt="Congregation worshipping together"
         fill
         priority

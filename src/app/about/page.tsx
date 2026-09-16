@@ -27,7 +27,7 @@ export default function AboutPage() {
         eyebrow="About Elayono Global"
         title="Who We Are"
         description="A global family, united by one faith and one mission."
-        image="https://images.unsplash.com/photo-1529070538774-1843cb3265df?q=80&w=2000&auto=format&fit=crop"
+        image="/photos/hero-about.jpg"
       />
 
       <section className="py-20 sm:py-28">

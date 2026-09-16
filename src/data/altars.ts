@@ -31,8 +31,7 @@ export const altars: Altar[] = [
       { label: "Midweek Prayer", time: "Wednesday, 7:00 PM (local time)" },
     ],
     map: { x: 21, y: 38 },
-    heroImage:
-      "https://images.unsplash.com/photo-1438032005730-c779502df39b?q=80&w=1600&auto=format&fit=crop",
+    heroImage: "/photos/altar-usa-canada.jpg",
   },
   {
     slug: "belgium",
@@ -46,8 +45,7 @@ export const altars: Altar[] = [
       { label: "Midweek Prayer", time: "Wednesday, 7:00 PM (local time)" },
     ],
     map: { x: 49, y: 27 },
-    heroImage:
-      "https://images.unsplash.com/photo-1543968996-ee822b8176ba?q=80&w=1600&auto=format&fit=crop",
+    heroImage: "/photos/altar-belgium.jpg",
   },
   {
     slug: "france",
@@ -61,8 +59,7 @@ export const altars: Altar[] = [
       { label: "Midweek Prayer", time: "Thursday, 7:00 PM (local time)" },
     ],
     map: { x: 48, y: 30 },
-    heroImage:
-      "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=1600&auto=format&fit=crop",
+    heroImage: "/photos/altar-france.jpg",
   },
   {
     slug: "sweden",
@@ -76,7 +73,6 @@ export const altars: Altar[] = [
       { label: "Midweek Prayer", time: "Wednesday, 6:30 PM (local time)" },
     ],
     map: { x: 53, y: 19 },
-    heroImage:
-      "https://images.unsplash.com/photo-1509356843151-3e7d96241e11?q=80&w=1600&auto=format&fit=crop",
+    heroImage: "/photos/altar-sweden.jpg",
   },
 ];

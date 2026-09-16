@@ -33,7 +33,7 @@ export default function GivePage() {
         eyebrow="Partner With Us"
         title="Give to Elayono Global"
         description="Your generosity fuels the Gospel across nations, sustaining altars and raising a generation for God's purpose."
-        image="https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?q=80&w=2000&auto=format&fit=crop"
+        image="/photos/hero-give.jpg"
       />
 
       <section className="py-20 sm:py-28">

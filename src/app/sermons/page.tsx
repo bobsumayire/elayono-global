@@ -18,7 +18,7 @@ export default function SermonsPage() {
         eyebrow="Media"
         title="Sermons & Teachings"
         description="Grow in the Word with messages from across the Elayono Global family."
-        image="https://images.unsplash.com/photo-1544427920-c49ccfb85579?q=80&w=2000&auto=format&fit=crop"
+        image="https:///photos/hero-sermons.jpg"
       />
 
       <section className="py-20 sm:py-28">

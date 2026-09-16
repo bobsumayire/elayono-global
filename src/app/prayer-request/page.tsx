@@ -15,7 +15,7 @@ export default function PrayerRequestPage() {
         eyebrow="We're Praying With You"
         title="Submit a Prayer Request"
         description="No request is too big or too small. Our prayer team stands ready to believe with you."
-        image="https://images.unsplash.com/photo-1490730141103-6cac27aaab94?q=80&w=2000&auto=format&fit=crop"
+        image="https:///photos/hero-prayer.jpg"
       />
 
       <section className="py-20 sm:py-28">

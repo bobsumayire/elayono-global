@@ -17,7 +17,7 @@ export default function AltarsPage() {
         eyebrow="Find an Altar"
         title="Our Altars Around the World"
         description="Wherever you find an Elayono Global altar, you'll find the same family — one faith, one mission."
-        image="https://images.unsplash.com/photo-1438032005730-c779502df39b?q=80&w=2000&auto=format&fit=crop"
+        image="/photos/hero-altars.jpg"
       />
 
       <section className="py-20 sm:py-28">

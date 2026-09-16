@@ -15,7 +15,7 @@ export default function NewsPage() {
       <PageHero
         eyebrow="News & Articles"
         title="Updates From Across the Ministry"
-        image="https://images.unsplash.com/photo-1478737270239-2f02b77fc618?q=80&w=2000&auto=format&fit=crop"
+        image="https:///photos/hero-news.jpg"
       />
 
       <section className="py-20 sm:py-28">

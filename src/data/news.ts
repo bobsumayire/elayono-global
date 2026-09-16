@@ -18,8 +18,7 @@ export const news: NewsArticle[] = [
     date: "2026-06-12",
     excerpt:
       "We are grateful to announce the launch of our newest altar in Sweden, extending the Elayono Global family into the Nordic region.",
-    image:
-      "https://images.unsplash.com/photo-1509356843151-3e7d96241e11?q=80&w=1200&auto=format&fit=crop",
+    image: "/photos/news-sweden-launch.jpg",
     category: "Ministry News",
   },
   {
@@ -28,8 +27,7 @@ export const news: NewsArticle[] = [
     date: "2026-07-20",
     excerpt:
       "Believers from every altar will gather both in person and online for three days of prayer, worship and impartation.",
-    image:
-      "https://images.unsplash.com/photo-1544427920-c49ccfb85579?q=80&w=1200&auto=format&fit=crop",
+    image: "/photos/news-conference.jpg",
     category: "Events",
   },
   {
@@ -38,8 +36,7 @@ export const news: NewsArticle[] = [
     date: "2026-08-02",
     excerpt:
       "Elayono Global's Media Ministry is expanding its reach, bringing sermons and teachings to believers around the world.",
-    image:
-      "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?q=80&w=1200&auto=format&fit=crop",
+    image: "/photos/news-media.jpg",
     category: "Ministry News",
   },
 ];

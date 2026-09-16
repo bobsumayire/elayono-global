@@ -15,7 +15,7 @@ export default function MediaPage() {
         eyebrow="Media"
         title="Gallery"
         description="Moments of worship, fellowship and mission from across our global family."
-        image="https://images.unsplash.com/photo-1478737270239-2f02b77fc618?q=80&w=2000&auto=format&fit=crop"
+        image="/photos/hero-media.jpg"
       />
 
       <section className="py-20 sm:py-28">

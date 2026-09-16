@@ -179,7 +179,7 @@ export default function Home() {
         description="Your generosity fuels the Gospel across nations — sustaining altars, reaching communities, and raising a generation for God's purpose."
         primary={{ label: "Give Now", href: "/give" }}
         secondary={{ label: "Learn How We Steward Giving", href: "/give#stewardship" }}
-        image="https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?q=80&w=2000&auto=format&fit=crop"
+        image="/photos/cta-home-give.jpg"
       />
 
       {/* News */}

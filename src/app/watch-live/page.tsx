@@ -16,7 +16,7 @@ export default function WatchLivePage() {
         eyebrow="Watch Live"
         title="Join a Service, Wherever You Are"
         description="Worship with the Elayono Global family in real time — connect from any altar's live stream."
-        image="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=2000&auto=format&fit=crop"
+        image="https:///photos/hero-watch-live.jpg"
       />
 
       <section className="py-20 sm:py-28">

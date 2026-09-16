@@ -16,7 +16,7 @@ export default function MinistriesPage() {
         eyebrow="Get Involved"
         title="Ministries Serving the Body of Christ"
         description="Every believer has a place to grow, serve and belong at Elayono Global."
-        image="https://images.unsplash.com/photo-1593113646773-028c64a8f1b8?q=80&w=2000&auto=format&fit=crop"
+        image="/photos/hero-ministries.jpg"
       />
 
       <section className="py-20 sm:py-28">
@@ -33,7 +33,7 @@ export default function MinistriesPage() {
         description="Interested in joining a ministry team at your local altar? We'd love to connect you with a leader."
         primary={{ label: "Contact Us", href: "/contact" }}
         secondary={{ label: "Find an Altar", href: "/altars" }}
-        image="https://images.unsplash.com/photo-1478737270239-2f02b77fc618?q=80&w=2000&auto=format&fit=crop"
+        image="/photos/cta-ministries.jpg"
       />
     </>
   );

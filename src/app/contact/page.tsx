@@ -17,7 +17,7 @@ export default function ContactPage() {
         eyebrow="Get in Touch"
         title="Contact Elayono Global"
         description="We'd love to hear from you — whether you have a question, want prayer, or want to visit an altar."
-        image="https://images.unsplash.com/photo-1507692049790-de58290a4334?q=80&w=2000&auto=format&fit=crop"
+        image="/photos/hero-contact.jpg"
       />
 
       <section className="py-20 sm:py-28">
