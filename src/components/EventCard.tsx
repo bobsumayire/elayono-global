@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import type { EventItem } from "@/data/events";
 import WhatsAppRegisterButton from "./WhatsAppRegisterButton";
+import ShareEventButton from "./ShareEventButton";
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
@@ -66,14 +67,9 @@ export default function EventCard({ event }: { event: EventItem }) {
             </div>
           </div>
         </button>
-        {event.whatsapp && (
-          <div className="p-5 pt-4">
-            <WhatsAppRegisterButton
-              phone={event.whatsapp}
-              message={`Hi, I'd like to register for ${event.title}.`}
-            />
-          </div>
-        )}
+        <div className="p-5 pt-4">
+          <EventActions event={event} />
+        </div>
       </div>
 
       {open && (
@@ -121,19 +117,34 @@ export default function EventCard({ event }: { event: EventItem }) {
                   <PinIcon /> {event.location}
                 </span>
               </div>
-              {event.whatsapp && (
-                <div className="pt-3">
-                  <WhatsAppRegisterButton
-                    phone={event.whatsapp}
-                    message={`Hi, I'd like to register for ${event.title}.`}
-                  />
-                </div>
-              )}
+              <div className="pt-3">
+                <EventActions event={event} />
+              </div>
             </div>
           </div>
         </div>
       )}
     </>
+  );
+}
+
+function EventActions({ event }: { event: EventItem }) {
+  return (
+    <div className="flex flex-col gap-2">
+      {event.whatsapp && (
+        <WhatsAppRegisterButton
+          phone={event.whatsapp}
+          message={`Hi, I'd like to register for ${event.title}.`}
+        />
+      )}
+      <ShareEventButton
+        title={event.title}
+        text={`${event.title} — ${formatDate(event.date)}${
+          event.endDate ? ` – ${formatDate(event.endDate)}` : ""
+        }, ${event.location}. Join us!`}
+        path={`/events#${event.slug}`}
+      />
+    </div>
   );
 }
 
