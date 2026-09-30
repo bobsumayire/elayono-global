@@ -10,7 +10,16 @@ function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 }
 
-export default function EventCard({ event, defaultOpen = false }: { event: EventItem; defaultOpen?: boolean }) {
+export default function EventCard({
+  event,
+  defaultOpen = false,
+  past = false,
+}: {
+  event: EventItem;
+  defaultOpen?: boolean;
+  /** Past events keep sharing but drop registration. */
+  past?: boolean;
+}) {
   const [open, setOpen] = useState(defaultOpen);
   const d = new Date(event.date);
 
@@ -68,7 +77,7 @@ export default function EventCard({ event, defaultOpen = false }: { event: Event
           </div>
         </button>
         <div className="p-5 pt-4">
-          <EventActions event={event} />
+          <EventActions event={event} past={past} />
         </div>
       </div>
 
@@ -118,7 +127,7 @@ export default function EventCard({ event, defaultOpen = false }: { event: Event
                 </span>
               </div>
               <div className="pt-3">
-                <EventActions event={event} />
+                <EventActions event={event} past={past} />
               </div>
             </div>
           </div>
@@ -128,10 +137,10 @@ export default function EventCard({ event, defaultOpen = false }: { event: Event
   );
 }
 
-function EventActions({ event }: { event: EventItem }) {
+function EventActions({ event, past }: { event: EventItem; past: boolean }) {
   return (
     <div className="flex flex-col gap-2">
-      {event.whatsapp && (
+      {event.whatsapp && !past && (
         <WhatsAppRegisterButton
           phone={event.whatsapp}
           message={`Hi, I'd like to register for ${event.title}.`}

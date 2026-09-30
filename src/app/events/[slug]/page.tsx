@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { connection } from "next/server";
 import EventsList from "@/components/EventsList";
 import { events } from "@/data/events";
 
@@ -44,6 +45,7 @@ export async function generateMetadata({
 export default async function EventPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   if (!events.some((e) => e.slug === slug)) notFound();
+  await connection();
 
   return <EventsList openSlug={slug} />;
 }

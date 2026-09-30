@@ -33,3 +33,9 @@ export const events: EventItem[] = [
     whatsapp: "12679399460",
   },
 ];
+
+/** True once the event's last day (`endDate`, or `date`) has passed. */
+export function isPastEvent(event: EventItem, now = new Date()) {
+  const today = now.toISOString().slice(0, 10);
+  return (event.endDate ?? event.date) < today;
+}
