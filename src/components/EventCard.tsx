@@ -10,8 +10,8 @@ function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 }
 
-export default function EventCard({ event }: { event: EventItem }) {
-  const [open, setOpen] = useState(false);
+export default function EventCard({ event, defaultOpen = false }: { event: EventItem; defaultOpen?: boolean }) {
+  const [open, setOpen] = useState(defaultOpen);
   const d = new Date(event.date);
 
   useEffect(() => {
@@ -36,13 +36,13 @@ export default function EventCard({ event }: { event: EventItem }) {
           className="flex flex-1 flex-col text-left"
           aria-haspopup="dialog"
         >
-          <div className="relative h-44 w-full overflow-hidden">
+          <div className="relative aspect-[4/5] w-full overflow-hidden bg-ink/5">
             <Image
               src={event.image}
               alt={event.title}
               fill
               sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
+              className="object-contain transition-transform duration-500 group-hover:scale-105"
             />
             <div className="absolute left-4 top-4 flex flex-col items-center rounded-xl bg-white/95 px-3 py-1.5 shadow-sm">
               <span className="text-xs font-bold uppercase tracking-wide text-brand-600">
@@ -142,7 +142,7 @@ function EventActions({ event }: { event: EventItem }) {
         text={`${event.title} — ${formatDate(event.date)}${
           event.endDate ? ` – ${formatDate(event.endDate)}` : ""
         }, ${event.location}. Join us!`}
-        path={`/events#${event.slug}`}
+        path={`/events/${event.slug}`}
       />
     </div>
   );

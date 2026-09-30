@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { siteConfig } from "@/lib/site";
 import { altars } from "@/data/altars";
 import { news } from "@/data/news";
+import { events } from "@/data/events";
 
 const staticRoutes = [
   "",
@@ -29,6 +30,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   altars.forEach((a) => {
     entries.push({ url: `${siteConfig.url}/altars/${a.slug}`, lastModified: now });
+  });
+  events.forEach((e) => {
+    entries.push({ url: `${siteConfig.url}/events/${e.slug}`, lastModified: now });
   });
   news.forEach((n) => {
     entries.push({ url: `${siteConfig.url}/news/${n.slug}`, lastModified: new Date(n.date) });

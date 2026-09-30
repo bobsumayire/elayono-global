@@ -5,7 +5,7 @@ export const siteConfig = {
   tagline: "One Family. One Faith. A Global Mission.",
   description:
     "Elayono Global is a growing international Christian ministry committed to proclaiming the Gospel, transforming lives, building faith and raising a generation for God's purpose.",
-  url: "https://www.elayonoglobal.org",
+  url: "https://www.elayonoglobal.com",
   email: "info@elayonoglobal.org",
   phone: "+1 (000) 000-0000",
   social: {
