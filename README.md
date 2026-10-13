@@ -19,8 +19,9 @@ to update the site, no other code changes required:
 
 - `altars.ts` — countries/cities, service times, map position. Add an object
   here to bring a new altar online across the map, footer and locations pages.
-- `sermons.ts`, `events.ts`, `ministries.ts`, `testimonies.ts`, `news.ts`,
-  `founder.ts`, `gallery.ts`
+- `sermons.ts`, `events.ts`, `blog.ts`, `ministries.ts`, `testimonies.ts`,
+  `founder.ts`, `gallery.ts` — add a post in `blog.ts` and set `published` to
+  `true` to put it on the Blog page and homepage.
 
 Site-wide settings (name, tagline, social links, navigation) live in
 `src/lib/site.ts`.
@@ -36,9 +37,9 @@ before this goes live:
 - **Founder portrait** — `src/components/PortraitPlaceholder.tsx` is a
   placeholder (no real photo was supplied). Swap it for an actual photo in
   the homepage and `/founder` page.
-- **Sermons, events, testimonies, news** — sample/placeholder content in
+- **Sermons, events, testimonies** — sample/placeholder content in
   `src/data/`. Testimonies in particular should only go live once approved
-  by the person quoted.
+  by the person quoted. The blog starts empty; publish from `src/data/blog.ts`.
 - **Forms** — `/api/contact`, `/api/prayer-request`, `/api/newsletter`
   validate input and return success but don't send email or persist
   anywhere yet. Wire them to a real provider (e.g. Resend, Mailchimp) or a

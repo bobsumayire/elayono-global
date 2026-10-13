@@ -39,7 +39,7 @@ export const primaryNav: NavLink[] = [
       { label: "Sermons & Teachings", href: "/sermons", description: "Watch and listen on demand" },
       { label: "Watch Live", href: "/watch-live", description: "Join a service in real time" },
       { label: "Gallery", href: "/media", description: "Photos and highlights" },
-      { label: "News & Articles", href: "/news", description: "Updates from across the ministry" },
+      { label: "Blog", href: "/blog", description: "Articles and news from the ministry" },
     ],
   },
   { label: "Events", href: "/events" },

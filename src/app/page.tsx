@@ -1,5 +1,3 @@
-import Image from "next/image";
-import Link from "next/link";
 import Hero from "@/components/Hero";
 import PortraitPlaceholder from "@/components/PortraitPlaceholder";
 import SectionHeading from "@/components/SectionHeading";
@@ -16,9 +14,12 @@ import { sermons } from "@/data/sermons";
 import { events } from "@/data/events";
 import { testimonies } from "@/data/testimonies";
 import { founder } from "@/data/founder";
-import { news } from "@/data/news";
+import { publishedPosts } from "@/data/blog";
+import BlogCard from "@/components/BlogCard";
 
 export default function Home() {
+  const latestPosts = publishedPosts().slice(0, 3);
+
   return (
     <>
       <Hero />
@@ -182,46 +183,24 @@ export default function Home() {
         image="/photos/cta-home-give.jpg"
       />
 
-      {/* News */}
-      <section className="py-20 sm:py-28">
-        <div className="container-elayono flex flex-col gap-10">
-          <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-            <SectionHeading
-              eyebrow="News & Articles"
-              title="Updates From Across the Ministry"
-            />
-            <Button href="/news" variant="ghost" className="shrink-0">
-              View All News
-            </Button>
+      {/* Blog */}
+      {latestPosts.length > 0 && (
+        <section className="py-20 sm:py-28">
+          <div className="container-elayono flex flex-col gap-10">
+            <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+              <SectionHeading eyebrow="Blog" title="Articles & News" />
+              <Button href="/blog" variant="ghost" className="shrink-0">
+                View the Blog
+              </Button>
+            </div>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {latestPosts.map((post) => (
+                <BlogCard key={post.slug} post={post} />
+              ))}
+            </div>
           </div>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {news.map((n) => (
-              <Link
-                key={n.slug}
-                href={`/news/${n.slug}`}
-                className="group flex flex-col overflow-hidden rounded-3xl border border-line bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-ink/5"
-              >
-                <div className="relative h-44 w-full overflow-hidden">
-                  <Image
-                    src={n.image}
-                    alt={n.title}
-                    fill
-                    sizes="(min-width: 1024px) 33vw, 100vw"
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                </div>
-                <div className="flex flex-1 flex-col gap-2 p-5">
-                  <span className="text-[11px] font-semibold uppercase tracking-[0.15em] text-brand-500">
-                    {n.category}
-                  </span>
-                  <h3 className="text-base font-bold leading-snug text-ink">{n.title}</h3>
-                  <p className="text-sm text-slate line-clamp-2">{n.excerpt}</p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Newsletter */}
       <section className="border-t border-line bg-brand-50 py-16">

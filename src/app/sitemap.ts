@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { siteConfig } from "@/lib/site";
 import { altars } from "@/data/altars";
-import { news } from "@/data/news";
+import { publishedPosts } from "@/data/blog";
 import { events } from "@/data/events";
 
 const staticRoutes = [
@@ -17,7 +17,7 @@ const staticRoutes = [
   "/altars",
   "/ministries",
   "/media",
-  "/news",
+  "/blog",
   "/contact",
 ];
 
@@ -34,8 +34,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   events.forEach((e) => {
     entries.push({ url: `${siteConfig.url}/events/${e.slug}`, lastModified: now });
   });
-  news.forEach((n) => {
-    entries.push({ url: `${siteConfig.url}/news/${n.slug}`, lastModified: new Date(n.date) });
+  publishedPosts().forEach((post) => {
+    entries.push({ url: `${siteConfig.url}/blog/${post.slug}`, lastModified: new Date(post.date) });
   });
 
   return entries;

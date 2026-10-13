@@ -7,6 +7,8 @@ type Props = {
   text: string;
   /** Path on this site to share, e.g. `/events#my-event`. */
   path: string;
+  /** Event cards open the menu upward. Pages with room below can open it downward. */
+  menuDirection?: "up" | "down";
 };
 
 type Platform = {
@@ -46,7 +48,7 @@ const platforms: Platform[] = [
   },
 ];
 
-export default function ShareEventButton({ title, text, path }: Props) {
+export default function ShareEventButton({ title, text, path, menuDirection = "up" }: Props) {
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const [canNativeShare, setCanNativeShare] = useState(false);
@@ -115,7 +117,11 @@ export default function ShareEventButton({ title, text, path }: Props) {
       </button>
 
       {open && (
-        <div className="absolute inset-x-0 bottom-full z-10 mb-2 animate-fade-in rounded-2xl border border-line bg-white p-2 shadow-xl shadow-ink/5">
+        <div
+          className={`absolute z-10 animate-fade-in rounded-2xl border border-line bg-white p-2 shadow-xl shadow-ink/5 ${
+            menuDirection === "down" ? "left-0 top-full mt-2 w-60" : "inset-x-0 bottom-full mb-2"
+          }`}
+        >
           <p className="px-3 pb-1 pt-1 text-[11px] font-semibold uppercase tracking-wide text-slate">
             Share via
           </p>

@@ -62,6 +62,7 @@ export default function Footer() {
               { label: "Our Founder", href: "/founder" },
               { label: "Sermons", href: "/sermons" },
               { label: "Events", href: "/events" },
+              { label: "Blog", href: "/blog" },
               { label: "Give", href: "/give" },
             ].map((l) => (
               <a key={l.href} href={l.href} className="text-sm text-white/70 hover:text-brand-300 transition-colors">
