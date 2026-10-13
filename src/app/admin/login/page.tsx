@@ -3,8 +3,9 @@ import Logo from "@/components/Logo";
 import LoginForm from "@/components/admin/LoginForm";
 import { isAdmin } from "@/lib/cms/auth";
 
-export default async function LoginPage() {
+export default async function LoginPage({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
   if (await isAdmin()) redirect("/admin");
+  const { error } = await searchParams;
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-mist px-5">
@@ -14,7 +15,7 @@ export default async function LoginPage() {
         <p className="mt-2 text-sm leading-relaxed text-slate">
           Manage articles, photos and the rest of the Elayono Global website.
         </p>
-        <LoginForm />
+        <LoginForm error={error} />
       </div>
     </div>
   );

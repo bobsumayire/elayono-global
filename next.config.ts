@@ -1,6 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  experimental: {
+    serverActions: {
+      allowedOrigins: ["www.elayonoglobal.com", "elayonoglobal.com"],
+    },
+  },
   async redirects() {
     return [
       { source: "/news", destination: "/blog", permanent: true },

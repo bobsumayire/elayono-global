@@ -1,14 +1,14 @@
-"use client";
-
-import { useActionState } from "react";
-import { signIn } from "@/lib/cms/actions";
-
-export default function LoginForm() {
-  const [state, action, pending] = useActionState(signIn, undefined);
+export default function LoginForm({ error }: { error?: string }) {
+  const message =
+    error === "config"
+      ? "The admin password is not configured yet."
+      : error
+        ? "That password is not correct."
+        : "";
 
   return (
-    <form action={action} className="mt-8 flex flex-col gap-4">
-      {state?.error && <p className="rounded-2xl bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">{state.error}</p>}
+    <form action="/api/admin/login" method="post" className="mt-8 flex flex-col gap-4">
+      {message && <p className="rounded-2xl bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">{message}</p>}
       <label className="flex flex-col gap-2 text-sm font-semibold text-ink">
         Password
         <input
@@ -21,10 +21,9 @@ export default function LoginForm() {
       </label>
       <button
         type="submit"
-        disabled={pending}
-        className="rounded-full bg-brand-500 px-6 py-3 text-sm font-semibold text-white hover:bg-brand-600 disabled:opacity-60"
+        className="rounded-full bg-brand-500 px-6 py-3 text-sm font-semibold text-white hover:bg-brand-600"
       >
-        {pending ? "Signing in…" : "Sign in"}
+        Sign in
       </button>
     </form>
   );
