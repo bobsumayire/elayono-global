@@ -16,6 +16,8 @@ export const siteConfig = {
   },
 };
 
+export type SiteSettings = typeof siteConfig;
+
 export type NavLink = {
   label: string;
   href: string;

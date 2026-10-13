@@ -1,8 +1,7 @@
 import type { ReactElement } from "react";
 import Logo from "./Logo";
 import NewsletterForm from "./NewsletterForm";
-import { altars } from "@/data/altars";
-import { siteConfig } from "@/lib/site";
+import { getAltars, getSite } from "@/lib/cms/read";
 
 const socialIcons: Record<string, ReactElement> = {
   facebook: (
@@ -27,7 +26,9 @@ const socialIcons: Record<string, ReactElement> = {
   ),
 };
 
-export default function Footer() {
+export default async function Footer() {
+  const [altars, siteConfig] = await Promise.all([getAltars(), getSite()]);
+
   return (
     <footer className="bg-ink text-white">
       <div className="container-elayono py-16">

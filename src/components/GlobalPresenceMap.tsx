@@ -2,7 +2,7 @@
 
 import { useId, useState } from "react";
 import Link from "next/link";
-import { altars, type Altar } from "@/data/altars";
+import type { Altar } from "@/data/altars";
 
 const HUB = { x: 50, y: 54 };
 
@@ -12,7 +12,7 @@ function arcPath(from: { x: number; y: number }, to: { x: number; y: number }) {
   return `M ${from.x} ${from.y} Q ${mx} ${my} ${to.x} ${to.y}`;
 }
 
-export default function GlobalPresenceMap() {
+export default function GlobalPresenceMap({ altars }: { altars: Altar[] }) {
   const [active, setActive] = useState<Altar | null>(null);
   const gridId = useId();
 

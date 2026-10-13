@@ -1,8 +1,5 @@
 import type { MetadataRoute } from "next";
-import { siteConfig } from "@/lib/site";
-import { altars } from "@/data/altars";
-import { publishedPosts } from "@/data/blog";
-import { events } from "@/data/events";
+import { getAltars, getEvents, getPublishedPosts, getSite } from "@/lib/cms/read";
 
 const staticRoutes = [
   "",
@@ -21,7 +18,8 @@ const staticRoutes = [
   "/contact",
 ];
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const [siteConfig, altars, events, posts] = await Promise.all([getSite(), getAltars(), getEvents(), getPublishedPosts()]);
   const now = new Date();
   const entries: MetadataRoute.Sitemap = staticRoutes.map((path) => ({
     url: `${siteConfig.url}${path}`,
@@ -34,7 +32,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   events.forEach((e) => {
     entries.push({ url: `${siteConfig.url}/events/${e.slug}`, lastModified: now });
   });
-  publishedPosts().forEach((post) => {
+  posts.forEach((post) => {
     entries.push({ url: `${siteConfig.url}/blog/${post.slug}`, lastModified: new Date(post.date) });
   });
 

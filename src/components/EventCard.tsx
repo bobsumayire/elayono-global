@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
+import ContentImage from "@/components/ContentImage";
 import type { EventItem } from "@/data/events";
 import WhatsAppRegisterButton from "./WhatsAppRegisterButton";
 import ShareEventButton from "./ShareEventButton";
@@ -46,10 +46,9 @@ export default function EventCard({
           aria-haspopup="dialog"
         >
           <div className="relative aspect-[4/5] w-full overflow-hidden bg-ink/5">
-            <Image
+            <ContentImage
               src={event.image}
               alt={event.title}
-              fill
               sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
               className="object-contain transition-transform duration-500 group-hover:scale-105"
             />
@@ -102,10 +101,9 @@ export default function EventCard({
               <CloseIcon />
             </button>
             <div className="relative min-h-[45vh] w-full shrink-0 bg-ink/5 sm:min-h-0 sm:w-1/2">
-              <Image
+              <ContentImage
                 src={event.image}
                 alt={event.title}
-                fill
                 sizes="(min-width: 640px) 50vw, 100vw"
                 className="object-contain"
               />

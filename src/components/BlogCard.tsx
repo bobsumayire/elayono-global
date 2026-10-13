@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import ContentImage from "@/components/ContentImage";
 import { categoryLabel, formatBlogDate, readingMinutes, type BlogPost } from "@/data/blog";
 
 type BlogCardProps = {
@@ -57,10 +57,9 @@ function Cover({ post, featured }: { post: BlogPost; featured: boolean }) {
 
   return (
     <div className={frame}>
-      <Image
+      <ContentImage
         src={post.image}
         alt=""
-        fill
         sizes={featured ? "(min-width: 1024px) 40vw, 100vw" : "(min-width: 1024px) 33vw, 100vw"}
         className="object-cover transition-transform duration-500 group-hover:scale-105"
       />

@@ -1,4 +1,4 @@
-import Image from "next/image";
+import ContentImage from "@/components/ContentImage";
 
 type PageHeroProps = {
   eyebrow?: string;
@@ -10,7 +10,7 @@ type PageHeroProps = {
 export default function PageHero({ eyebrow, title, description, image }: PageHeroProps) {
   return (
     <section className="relative flex min-h-[46vh] items-end overflow-hidden bg-ink">
-      <Image src={image} alt="" fill priority sizes="100vw" className="object-cover opacity-55" />
+      <ContentImage src={image} alt="" priority sizes="100vw" className="object-cover opacity-55" />
       <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/60 to-ink/30" />
       <div className="container-elayono relative z-10 flex flex-col gap-4 py-16">
         {eyebrow && (

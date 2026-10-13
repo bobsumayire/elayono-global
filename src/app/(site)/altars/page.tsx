@@ -1,0 +1,44 @@
+import type { Metadata } from "next";
+import PageHero from "@/components/PageHero";
+import SectionHeading from "@/components/SectionHeading";
+import GlobalPresenceMap from "@/components/GlobalPresenceMap";
+import LocationCard from "@/components/LocationCard";
+import { getAltars } from "@/lib/cms/read";
+
+export const metadata: Metadata = {
+  title: "Our Altars",
+  description: "Find an Elayono Global altar near you across the USA & Canada, Belgium, France and Sweden.",
+};
+
+export default async function AltarsPage() {
+  const altars = await getAltars();
+
+  return (
+    <>
+      <PageHero
+        eyebrow="Find an Altar"
+        title="Our Altars Around the World"
+        description="Wherever you find an Elayono Global altar, you'll find the same family — one faith, one mission."
+        image="/photos/hero-altars.jpg"
+      />
+
+      <section className="py-20 sm:py-28">
+        <div className="container-elayono flex flex-col gap-10">
+          <SectionHeading eyebrow="Global Map" title="A Global Family, United by Faith" />
+          <GlobalPresenceMap altars={altars} />
+        </div>
+      </section>
+
+      <section className="bg-mist py-20 sm:py-28">
+        <div className="container-elayono flex flex-col gap-10">
+          <SectionHeading eyebrow="All Altars" title="Browse by Location" />
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {altars.map((a) => (
+              <LocationCard key={a.slug} altar={a} />
+            ))}
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}

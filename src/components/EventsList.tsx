@@ -1,13 +1,15 @@
 import PageHero from "@/components/PageHero";
 import EventCard from "@/components/EventCard";
 import SectionHeading from "@/components/SectionHeading";
-import { events, isPastEvent, type EventItem } from "@/data/events";
+import { isPastEvent, type EventItem } from "@/data/events";
+import { getEvents } from "@/lib/cms/read";
 
 /**
  * The Events page body: upcoming events first (soonest first), then past
  * events (most recent first). `openSlug` opens that event's poster popup on load.
  */
-export default function EventsList({ openSlug }: { openSlug?: string }) {
+export default async function EventsList({ openSlug }: { openSlug?: string }) {
+  const events = await getEvents();
   const now = new Date();
   const upcoming = events
     .filter((e) => !isPastEvent(e, now))

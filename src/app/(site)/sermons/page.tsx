@@ -1,0 +1,65 @@
+import type { Metadata } from "next";
+import PageHero from "@/components/PageHero";
+import SermonCard from "@/components/SermonCard";
+import Button from "@/components/Button";
+import { getSermons } from "@/lib/cms/read";
+
+export const metadata: Metadata = {
+  title: "Sermons & Teachings",
+  description: "Watch and listen to sermons and teachings from Elayono Global, on demand.",
+};
+
+export default async function SermonsPage() {
+  const sermons = await getSermons();
+  const series = Array.from(new Set(sermons.map((s) => s.series).filter(Boolean)));
+
+  return (
+    <>
+      <PageHero
+        eyebrow="Media"
+        title="Sermons & Teachings"
+        description="Grow in the Word with messages from across the Elayono Global family."
+        image="/photos/hero-sermons.jpg"
+      />
+
+      <section className="py-20 sm:py-28">
+        <div className="container-elayono flex flex-col gap-10">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex flex-wrap gap-2">
+              <span className="rounded-full bg-brand-500 px-4 py-2 text-sm font-semibold text-white">
+                All Messages
+              </span>
+              {series.map((s) => (
+                <span
+                  key={s}
+                  className="rounded-full border border-line px-4 py-2 text-sm font-medium text-slate"
+                >
+                  {s}
+                </span>
+              ))}
+            </div>
+            <Button href="/watch-live" variant="primary">
+              Watch Live
+            </Button>
+          </div>
+
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {sermons.map((s) => (
+              <SermonCard key={s.slug} sermon={s} />
+            ))}
+          </div>
+
+          <div className="flex justify-center">
+            <Button
+              href="https://www.youtube.com/@propheternestnyirindekwe715"
+              variant="ghost"
+              size="lg"
+            >
+              Watch More on YouTube
+            </Button>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}

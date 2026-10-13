@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import ContentImage from "@/components/ContentImage";
 import type { Altar } from "@/data/altars";
 
 export default function LocationCard({ altar }: { altar: Altar }) {
@@ -9,10 +9,9 @@ export default function LocationCard({ altar }: { altar: Altar }) {
       className="group relative flex flex-col overflow-hidden rounded-3xl border border-line bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-ink/5"
     >
       <div className="relative h-48 w-full overflow-hidden">
-        <Image
+        <ContentImage
           src={altar.heroImage}
           alt={`${altar.country} altar`}
-          fill
           sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
           className="object-cover transition-transform duration-500 group-hover:scale-105"
         />

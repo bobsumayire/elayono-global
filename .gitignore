@@ -40,6 +40,10 @@ yarn-error.log*
 .open-next
 .wrangler
 
+# local admin content
+.data
+public/uploads
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

@@ -7,5 +7,18 @@
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS"
-  }
+  },
+  "d1_databases": [
+    {
+      "binding": "CONTENT_DB",
+      "database_name": "elayono-content",
+      "database_id": "3877bb9c-d05d-4af7-a3bd-d28c6440ddd4"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "MEDIA",
+      "bucket_name": "elayono-media"
+    }
+  ]
 }

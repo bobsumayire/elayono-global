@@ -20,8 +20,8 @@ to update the site, no other code changes required:
 - `altars.ts` — countries/cities, service times, map position. Add an object
   here to bring a new altar online across the map, footer and locations pages.
 - `sermons.ts`, `events.ts`, `blog.ts`, `ministries.ts`, `testimonies.ts`,
-  `founder.ts`, `gallery.ts` — add a post in `blog.ts` and set `published` to
-  `true` to put it on the Blog page and homepage.
+  `founder.ts`, `gallery.ts` — these are the starting content. After the admin
+  is set up, edit the live site at `/admin` instead.
 
 Site-wide settings (name, tagline, social links, navigation) live in
 `src/lib/site.ts`.
@@ -39,7 +39,8 @@ before this goes live:
   the homepage and `/founder` page.
 - **Sermons, events, testimonies** — sample/placeholder content in
   `src/data/`. Testimonies in particular should only go live once approved
-  by the person quoted. The blog starts empty; publish from `src/data/blog.ts`.
+  by the person quoted. Publish articles from `/admin` once `ADMIN_PASSWORD`
+  and `ADMIN_SESSION_SECRET` are set.
 - **Forms** — `/api/contact`, `/api/prayer-request`, `/api/newsletter`
   validate input and return success but don't send email or persist
   anywhere yet. Wire them to a real provider (e.g. Resend, Mailchimp) or a
