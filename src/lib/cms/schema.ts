@@ -42,13 +42,18 @@ export const collections: CollectionSchema[] = [
       { key: "category", label: "Category", type: "select", options: ["News", "Article"], required: true },
       { key: "author", label: "Author", type: "text", placeholder: "Elayono Global" },
       { key: "excerpt", label: "Excerpt", type: "textarea", required: true, help: "Shown on the blog list and in link previews." },
-      { key: "image", label: "Cover image", type: "image" },
+      {
+        key: "image",
+        label: "Cover image",
+        type: "image",
+        help: "This photo is the preview people see when the article link is shared on WhatsApp, Facebook and other apps.",
+      },
       { key: "published", label: "Published", type: "checkbox", help: "Only published posts appear on the website." },
       {
         key: "body",
         label: "Story",
         type: "blocks",
-        help: "Blank line between paragraphs. Start a line with ## for a heading, > for a quote, or - for a list item.",
+        help: "Blank line between paragraphs. Start a line with ## for a heading, > for a quote, or - for a list item. Use Add photo to place pictures in the story.",
       },
     ],
     blank: () => ({

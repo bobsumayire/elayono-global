@@ -1,3 +1,4 @@
+import ContentImage from "@/components/ContentImage";
 import type { BlogBlock } from "@/data/blog";
 
 export default function BlogBody({ blocks }: { blocks: BlogBlock[] }) {
@@ -22,6 +23,16 @@ export default function BlogBody({ blocks }: { blocks: BlogBlock[] }) {
             >
               {block.quote}
             </blockquote>
+          );
+        }
+        if ("image" in block) {
+          return (
+            <figure key={index} className="my-2">
+              <div className="relative aspect-[16/10] overflow-hidden rounded-3xl">
+                <ContentImage src={block.image} alt={block.caption ?? ""} sizes="(min-width: 1024px) 768px, 100vw" className="object-cover" />
+              </div>
+              {block.caption ? <figcaption className="mt-3 text-center text-sm text-slate">{block.caption}</figcaption> : null}
+            </figure>
           );
         }
         return (

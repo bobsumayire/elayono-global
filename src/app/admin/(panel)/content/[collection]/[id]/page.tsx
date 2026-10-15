@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import EntryForm from "@/components/admin/EntryForm";
+import { listMedia } from "@/lib/cms/media";
 import { clientSchema, documentToForm, getCollection } from "@/lib/cms/schema";
 import { readDocument } from "@/lib/cms/store";
 
@@ -18,6 +19,7 @@ export default async function EntryPage({
 
   const doc = id === "new" ? null : await readDocument(schema.name, id);
   if (id !== "new" && !doc) notFound();
+  const photos = schema.name === "blog" ? await listMedia() : [];
 
   return (
     <div className="mx-auto flex max-w-5xl flex-col gap-6">
@@ -29,7 +31,7 @@ export default async function EntryPage({
           {id === "new" ? `New ${schema.label === "Blog" ? "article" : "entry"}` : String(doc?.[schema.titleKey] ?? "Edit")}
         </h1>
       </div>
-      <EntryForm schema={clientSchema(schema)} initial={documentToForm(schema, doc)} originalId={id} saved={saved === "1"} />
+      <EntryForm schema={clientSchema(schema)} initial={documentToForm(schema, doc)} originalId={id} saved={saved === "1"} photos={photos} />
     </div>
   );
 }

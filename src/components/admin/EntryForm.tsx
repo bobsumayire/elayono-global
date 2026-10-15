@@ -4,17 +4,20 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { removeEntry, saveEntry, uploadImage } from "@/lib/cms/actions";
 import { slugify, type ClientCollection } from "@/lib/cms/schema";
+import StoryEditor from "@/components/admin/StoryEditor";
 
 export default function EntryForm({
   schema,
   initial,
   originalId,
   saved,
+  photos = [],
 }: {
   schema: ClientCollection;
   initial: Record<string, string>;
   originalId: string;
   saved?: boolean;
+  photos?: { url: string }[];
 }) {
   const router = useRouter();
   const [values, setValues] = useState(initial);
@@ -61,13 +64,21 @@ export default function EntryForm({
       {error && <p className="rounded-2xl bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">{error}</p>}
 
       {schema.fields.map((field) => (
-        <label key={field.key} className="flex flex-col gap-2">
+        <div key={field.key} className="flex flex-col gap-2">
           <span className="text-sm font-semibold text-ink">{field.label}</span>
-          {field.type === "textarea" || field.type === "lines" || field.type === "pairs" || field.type === "blocks" ? (
+          {field.type === "blocks" ? (
+            <StoryEditor
+              value={values[field.key] ?? ""}
+              onChange={(next) => set(field.key, next)}
+              photos={photos}
+              help={field.help}
+              onError={setError}
+            />
+          ) : field.type === "textarea" || field.type === "lines" || field.type === "pairs" ? (
             <textarea
               value={values[field.key] ?? ""}
               onChange={(event) => set(field.key, event.target.value)}
-              rows={field.type === "blocks" || field.type === "lines" ? 8 : 4}
+              rows={field.type === "lines" ? 8 : 4}
               className="rounded-2xl border border-line bg-white px-4 py-3 text-sm text-ink outline-none focus:border-brand-500"
             />
           ) : field.type === "select" ? (
@@ -107,6 +118,22 @@ export default function EntryForm({
                 className="text-sm text-slate"
               />
               {uploading === field.key && <span className="text-xs text-slate">Uploading…</span>}
+              {schema.name === "blog" && field.key === "image" && (
+                <div className="overflow-hidden rounded-2xl border border-line">
+                  <p className="px-4 pt-3 text-xs font-semibold uppercase tracking-[0.14em] text-slate">Link preview</p>
+                  {values.image ? (
+                    <img src={values.image} alt="" className="mt-3 h-44 w-full object-cover" />
+                  ) : (
+                    <div className="mt-3 flex h-44 items-center justify-center bg-mist px-6 text-center text-sm text-slate">
+                      Add a cover photo. Shared links use it as the preview.
+                    </div>
+                  )}
+                  <div className="p-4">
+                    <p className="font-semibold text-ink">{values.title || "Article title"}</p>
+                    <p className="mt-1 line-clamp-2 text-sm text-slate">{values.excerpt || "The excerpt appears under the photo."}</p>
+                  </div>
+                </div>
+              )}
             </div>
           ) : (
             <input
@@ -122,8 +149,8 @@ export default function EntryForm({
               className="rounded-2xl border border-line bg-white px-4 py-3 text-sm text-ink outline-none focus:border-brand-500"
             />
           )}
-          {field.help && <span className="text-xs leading-relaxed text-slate">{field.help}</span>}
-        </label>
+          {field.help && field.type !== "blocks" && <span className="text-xs leading-relaxed text-slate">{field.help}</span>}
+        </div>
       ))}
 
       <div className="flex flex-wrap gap-3 pt-2">

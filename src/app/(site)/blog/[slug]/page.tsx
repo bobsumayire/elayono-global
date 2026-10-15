@@ -7,6 +7,8 @@ import ContentImage from "@/components/ContentImage";
 import ShareEventButton from "@/components/ShareEventButton";
 import { categoryLabel, formatBlogDate, postAuthor, readingMinutes } from "@/data/blog";
 import { getPublishedPost, getPublishedPosts } from "@/lib/cms/read";
+import { shareImageUrl } from "@/lib/share";
+import { siteConfig } from "@/lib/site";
 
 export async function generateMetadata({
   params,
@@ -17,8 +19,11 @@ export async function generateMetadata({
   const post = await getPublishedPost(slug);
   if (!post) return {};
 
-  const image = post.image ? [{ url: post.image, alt: post.title }] : undefined;
+  const inline = post.body.find((block) => typeof block !== "string" && "image" in block);
+  const imageUrl = shareImageUrl(post.image || (inline && "image" in inline ? inline.image : ""));
+  const preview = { url: imageUrl, alt: post.title };
   return {
+    metadataBase: new URL(siteConfig.url),
     title: post.title,
     description: post.excerpt,
     alternates: { canonical: `/blog/${post.slug}` },
@@ -29,13 +34,13 @@ export async function generateMetadata({
       type: "article",
       publishedTime: post.date,
       authors: [postAuthor(post)],
-      images: image,
+      images: [preview],
     },
     twitter: {
       card: "summary_large_image",
       title: post.title,
       description: post.excerpt,
-      images: post.image ? [post.image] : undefined,
+      images: [preview],
     },
   };
 }

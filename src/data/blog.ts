@@ -19,6 +19,7 @@
  *     "Another paragraph.",
  *     { quote: "A short quotation or scripture." },
  *     { list: ["First point", "Second point"] },
+ *     { image: "/photos/hero-news.jpg", caption: "Optional caption" },
  *   ],
  * }
  */
@@ -31,7 +32,8 @@ export type BlogBlock =
   | string
   | { heading: string }
   | { quote: string }
-  | { list: string[] };
+  | { list: string[] }
+  | { image: string; caption?: string };
 
 export type BlogPost = {
   slug: string;
@@ -79,7 +81,8 @@ export function readingMinutes(post: BlogPost): number {
       if (typeof block === "string") return block;
       if ("heading" in block) return block.heading;
       if ("quote" in block) return block.quote;
-      return block.list.join(" ");
+      if ("list" in block) return block.list.join(" ");
+      return block.caption ?? "";
     }),
   ].join(" ");
   const words = text.trim().split(/\s+/).filter(Boolean).length;

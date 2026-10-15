@@ -7,6 +7,7 @@ export function blocksToText(blocks: BlogBlock[] | undefined): string {
       if (typeof block === "string") return block;
       if ("heading" in block) return `## ${block.heading}`;
       if ("quote" in block) return `> ${block.quote}`;
+      if ("image" in block) return block.caption ? `! ${block.image} | ${block.caption}` : `! ${block.image}`;
       return block.list.map((item) => `- ${item}`).join("\n");
     })
     .join("\n\n");
@@ -32,6 +33,17 @@ export function textToBlocks(text: string): BlogBlock[] {
     if (!line) {
       flushParagraph();
       flushList();
+      continue;
+    }
+    if (line.startsWith("! ")) {
+      flushParagraph();
+      flushList();
+      const [src, ...captionParts] = line.slice(2).split("|");
+      const image = src.trim();
+      if (image) {
+        const caption = captionParts.join("|").trim();
+        blocks.push(caption ? { image, caption } : { image });
+      }
       continue;
     }
     if (line.startsWith("## ")) {
