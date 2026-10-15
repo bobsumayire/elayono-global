@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import EntryForm from "@/components/admin/EntryForm";
-import { documentToForm, getCollection } from "@/lib/cms/schema";
+import { clientSchema, documentToForm, getCollection } from "@/lib/cms/schema";
 import { readDocument } from "@/lib/cms/store";
 
 export default async function EntryPage({
@@ -29,7 +29,7 @@ export default async function EntryPage({
           {id === "new" ? `New ${schema.label === "Blog" ? "article" : "entry"}` : String(doc?.[schema.titleKey] ?? "Edit")}
         </h1>
       </div>
-      <EntryForm schema={schema} initial={documentToForm(schema, doc)} originalId={id} saved={saved === "1"} />
+      <EntryForm schema={clientSchema(schema)} initial={documentToForm(schema, doc)} originalId={id} saved={saved === "1"} />
     </div>
   );
 }

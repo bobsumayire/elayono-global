@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { removeEntry, saveEntry, uploadImage } from "@/lib/cms/actions";
-import { slugify, type CollectionSchema } from "@/lib/cms/schema";
+import { slugify, type ClientCollection } from "@/lib/cms/schema";
 
 export default function EntryForm({
   schema,
@@ -11,7 +11,7 @@ export default function EntryForm({
   originalId,
   saved,
 }: {
-  schema: CollectionSchema;
+  schema: ClientCollection;
   initial: Record<string, string>;
   originalId: string;
   saved?: boolean;

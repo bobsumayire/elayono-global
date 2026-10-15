@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import EntryForm from "@/components/admin/EntryForm";
-import { documentToForm, getCollection } from "@/lib/cms/schema";
+import { clientSchema, documentToForm, getCollection } from "@/lib/cms/schema";
 import { readCollection, readDocument } from "@/lib/cms/store";
 
 export default async function CollectionPage({
@@ -24,7 +24,7 @@ export default async function CollectionPage({
           <h1 className="text-3xl font-extrabold tracking-tight text-ink">{schema.label}</h1>
           <p className="mt-2 text-sm text-slate">{schema.description}</p>
         </div>
-        <EntryForm schema={schema} initial={documentToForm(schema, doc)} originalId="main" saved={saved === "1"} />
+        <EntryForm schema={clientSchema(schema)} initial={documentToForm(schema, doc)} originalId="main" saved={saved === "1"} />
       </div>
     );
   }

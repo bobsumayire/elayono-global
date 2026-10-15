@@ -357,6 +357,21 @@ function resolveId(schema: CollectionSchema, values: Record<string, string>, ori
   return crypto.randomUUID();
 }
 
+export type ClientCollection = Omit<CollectionSchema, "blank">;
+
+export function clientSchema(schema: CollectionSchema): ClientCollection {
+  return {
+    name: schema.name,
+    label: schema.label,
+    description: schema.description,
+    idKey: schema.idKey,
+    titleKey: schema.titleKey,
+    summaryKey: schema.summaryKey,
+    singleton: schema.singleton,
+    fields: schema.fields,
+  };
+}
+
 export function documentToForm(schema: CollectionSchema, doc: Record<string, unknown> | null): Record<string, string> {
   const source: Record<string, unknown> = doc ? { ...doc } : {};
   if (schema.name === "altars" && source.map && typeof source.map === "object") {
