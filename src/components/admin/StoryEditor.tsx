@@ -129,7 +129,7 @@ export default function StoryEditor({
         <div className="flex flex-col gap-3">
           {pictures.map((picture, index) => (
             <div key={`${picture.src}-${index}`} className="flex gap-3 rounded-2xl border border-line bg-white p-3">
-              <img src={picture.src} alt="" className="h-20 w-28 shrink-0 rounded-xl object-cover" />
+              <img src={picture.src} alt="" className="h-24 w-24 shrink-0 rounded-xl bg-mist object-contain" />
               <div className="flex min-w-0 flex-1 flex-col gap-2">
                 <input
                   value={picture.caption}

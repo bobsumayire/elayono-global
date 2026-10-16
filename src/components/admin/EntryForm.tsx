@@ -103,7 +103,7 @@ export default function EntryForm({
           ) : field.type === "image" ? (
             <div className="flex flex-col gap-3 rounded-2xl border border-line bg-white p-4">
               {values[field.key] && (
-                <img src={values[field.key]} alt="" className="h-40 w-full rounded-xl object-cover" />
+                <img src={values[field.key]} alt="" className="mx-auto block h-auto w-auto max-h-[min(70vh,32rem)] max-w-full rounded-xl object-contain" />
               )}
               <input
                 value={values[field.key] ?? ""}
@@ -122,9 +122,9 @@ export default function EntryForm({
                 <div className="overflow-hidden rounded-2xl border border-line">
                   <p className="px-4 pt-3 text-xs font-semibold uppercase tracking-[0.14em] text-slate">Link preview</p>
                   {values.image ? (
-                    <img src={values.image} alt="" className="mt-3 h-44 w-full object-cover" />
+                    <img src={values.image} alt="" className="mx-auto mt-3 block h-auto w-auto max-h-[min(70vh,32rem)] max-w-full object-contain" />
                   ) : (
-                    <div className="mt-3 flex h-44 items-center justify-center bg-mist px-6 text-center text-sm text-slate">
+                    <div className="mx-3 mt-3 flex min-h-36 items-center justify-center rounded-xl bg-mist px-6 py-8 text-center text-sm text-slate">
                       Add a cover photo. Shared links use it as the preview.
                     </div>
                   )}

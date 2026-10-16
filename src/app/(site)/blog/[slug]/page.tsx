@@ -83,9 +83,9 @@ export default async function BlogArticlePage({
         </div>
 
         {post.image && (
-          <div className="relative mt-8 aspect-video w-full overflow-hidden rounded-3xl">
-            <ContentImage src={post.image} alt="" sizes="(min-width: 1024px) 768px, 100vw" className="object-cover" priority />
-          </div>
+          <figure className="mt-8">
+            <ContentImage src={post.image} alt="" fit="natural" className="rounded-3xl" priority />
+          </figure>
         )}
 
         <p className="mt-10 text-xl leading-relaxed text-ink">{post.excerpt}</p>
