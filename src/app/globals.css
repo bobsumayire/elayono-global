@@ -133,3 +133,53 @@ h1, h2, h3, h4, h5, h6 {
 .text-balance {
   text-wrap: balance;
 }
+
+.rich-text strong,
+.rich-text b {
+  font-weight: 700;
+}
+
+.rich-text em,
+.rich-text i {
+  font-style: italic;
+}
+
+.rich-text u {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.rich-text a {
+  color: var(--color-brand-700);
+  text-decoration: underline;
+}
+
+.rich-text [data-font="body"] {
+  font-family: var(--font-body), Inter, sans-serif;
+}
+
+.rich-text [data-font="heading"] {
+  font-family: var(--font-heading), Manrope, sans-serif;
+}
+
+.rich-text [data-font="serif"] {
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.rich-text [data-size="sm"] {
+  font-size: 0.875em;
+}
+
+.rich-text [data-size="lg"] {
+  font-size: 1.25em;
+}
+
+.rich-text [data-size="xl"] {
+  font-size: 1.6em;
+}
+
+.rich-placeholder[data-empty]::before {
+  content: attr(data-placeholder);
+  color: color-mix(in srgb, var(--color-slate) 55%, transparent);
+  pointer-events: none;
+}

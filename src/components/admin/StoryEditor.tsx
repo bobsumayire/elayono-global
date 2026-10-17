@@ -1,8 +1,10 @@
 "use client";
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { FormatBar, RichField } from "@/components/admin/RichField";
 import { uploadImage } from "@/lib/cms/actions";
 import { blocksToText, textToBlocks } from "@/lib/cms/blocks";
+import { focusRich, joinAlign, plainText, splitAlign, textLength } from "@/lib/cms/richText";
 import type { BlogBlock } from "@/data/blog";
 
 type Photo = { url: string };
@@ -74,15 +76,15 @@ function createBlock(type: BlockType): EditorBlock {
 function editorToBlog(blocks: EditorBlock[]): BlogBlock[] {
   const result: BlogBlock[] = [];
   for (const block of blocks) {
-    if (block.type === "paragraph" && block.text.trim()) result.push(block.text);
-    else if (block.type === "heading" && block.text.trim()) result.push({ heading: block.text });
-    else if (block.type === "quote" && block.text.trim()) result.push({ quote: block.text });
+    if (block.type === "paragraph" && plainText(block.text)) result.push(block.text);
+    else if (block.type === "heading" && plainText(block.text)) result.push({ heading: block.text });
+    else if (block.type === "quote" && plainText(block.text)) result.push({ quote: block.text });
     else if (block.type === "list") {
-      const items = block.items.map((item) => item.trim()).filter(Boolean);
+      const items = block.items.filter((item) => plainText(item));
       if (items.length) result.push({ list: items });
     } else if (block.type === "image" && block.src.trim() && !block.src.startsWith("blob:")) {
       const image = block.src.trim();
-      const caption = block.caption.trim();
+      const caption = plainText(block.caption) ? block.caption.trim() : "";
       result.push(caption ? { image, caption } : { image });
     }
   }
@@ -312,7 +314,7 @@ export default function StoryEditor({
   const fileRef = useRef<HTMLInputElement>(null);
   const uploadAt = useRef<{ index: number; replaceId?: string }>({ index: 0 });
   const focusRef = useRef<string | null>(null);
-  const caretRef = useRef<{ id: string; pos: number } | null>(null);
+  const caretRef = useRef<{ id: string; pos: number | "end" } | null>(null);
   const dragDepth = useRef(0);
 
   const library = [...added, ...photos.filter((photo) => !added.some((item) => item.url === photo.url))];
@@ -338,13 +340,17 @@ export default function StoryEditor({
     const id = focusRef.current;
     if (!id) return;
     focusRef.current = null;
-    const field = document.getElementById(id) as HTMLTextAreaElement | null;
-    if (!field) return;
-    field.focus();
-    const pos = caretRef.current?.id === id ? caretRef.current.pos : field.value.length;
+    const field = document.getElementById(id);
+    const pos = caretRef.current?.id === id ? caretRef.current.pos : "end";
     caretRef.current = null;
-    const clamped = Math.min(pos, field.value.length);
-    field.setSelectionRange(clamped, clamped);
+    if (!field) return;
+    if (field instanceof HTMLTextAreaElement) {
+      field.focus();
+      const at = pos === "end" ? field.value.length : Math.min(pos, field.value.length);
+      field.setSelectionRange(at, at);
+      return;
+    }
+    if (field instanceof HTMLElement) focusRich(field, pos);
   }, [blocks]);
 
   const onBusyRef = useRef(onBusy);
@@ -433,7 +439,7 @@ export default function StoryEditor({
     if (inserter.replaceId) {
       const existing = current.findIndex((block) => block.id === inserter.replaceId);
       const block = current[existing];
-      if (existing !== -1 && block?.type === "paragraph" && !block.text.trim()) {
+      if (existing !== -1 && block?.type === "paragraph" && !plainText(block.text)) {
         current.splice(existing, 1, created);
         index = existing;
       } else if (existing !== -1) {
@@ -517,7 +523,7 @@ export default function StoryEditor({
     const index = current.findIndex((block) => block.id === id);
     const block = current[index];
     if (!block || (block.type !== "paragraph" && block.type !== "heading" && block.type !== "quote")) return;
-    if (block.type === "paragraph" && block.text === "" && text === "/") {
+    if (block.type === "paragraph" && plainText(block.text) === "" && plainText(text) === "/") {
       setInserter({ anchor: `slash:${id}`, index, replaceId: id, placement: "down" });
       setSelectedId(id);
       return;
@@ -527,13 +533,13 @@ export default function StoryEditor({
     commit(next);
   };
 
-  const splitText = (block: Extract<EditorBlock, { text: string }>, at: number) => {
+  const splitRich = (block: Extract<EditorBlock, { text: string }>, before: string, after: string) => {
     const current = blocksRef.current;
     const index = current.findIndex((item) => item.id === block.id);
     if (index === -1) return;
-    const created = fromBlog(block.text.slice(at), uid());
+    const created = fromBlog(after, uid());
     const next = current.slice();
-    next[index] = { ...block, text: block.text.slice(0, at) };
+    next[index] = { ...block, text: joinAlign(splitAlign(block.text).align, before) };
     next.splice(index + 1, 0, created);
     focusRef.current = fieldId(created);
     caretRef.current = { id: fieldId(created), pos: 0 };
@@ -547,9 +553,10 @@ export default function StoryEditor({
     if (index <= 0) return false;
     const previous = current[index - 1];
     if (previous.type !== "paragraph" && previous.type !== "heading" && previous.type !== "quote") return false;
-    const pos = previous.text.length;
+    const prev = splitAlign(previous.text);
+    const pos = textLength(prev.body);
     const next = current.slice();
-    next[index - 1] = { ...previous, text: previous.text + block.text };
+    next[index - 1] = { ...previous, text: joinAlign(prev.align, prev.body + splitAlign(block.text).body) };
     next.splice(index, 1);
     focusRef.current = fieldId(previous);
     caretRef.current = { id: fieldId(previous), pos };
@@ -558,75 +565,55 @@ export default function StoryEditor({
     return true;
   };
 
-  const onTextKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>, block: Extract<EditorBlock, { text: string }>) => {
-    if (event.key === "Enter" && !event.shiftKey) {
-      event.preventDefault();
-      splitText(block, event.currentTarget.selectionStart);
-      return;
-    }
-    if (event.key === "Backspace" && event.currentTarget.selectionStart === 0 && event.currentTarget.selectionEnd === 0) {
-      if (!block.text) {
-        if (blocksRef.current.length === 1) return;
-        event.preventDefault();
-        const index = blocksRef.current.findIndex((item) => item.id === block.id);
-        const previous = blocksRef.current[index - 1];
-        removeBlock(block.id);
-        if (previous) {
-          focusRef.current = fieldId(previous);
-          setSelectedId(previous.id);
-        }
-        return;
+  const backspaceText = (block: Extract<EditorBlock, { text: string }>) => {
+    if (!plainText(block.text)) {
+      if (blocksRef.current.length === 1) return false;
+      const index = blocksRef.current.findIndex((item) => item.id === block.id);
+      const previous = blocksRef.current[index - 1];
+      removeBlock(block.id);
+      if (previous) {
+        focusRef.current = fieldId(previous);
+        caretRef.current = { id: fieldId(previous), pos: "end" };
+        setSelectedId(previous.id);
       }
-      if (mergeBackward(block)) event.preventDefault();
+      return true;
     }
+    return mergeBackward(block);
   };
 
-  const pasteText = (block: Extract<EditorBlock, { text: string }>, start: number, end: number, text: string) => {
+  const pasteRichLines = (block: Extract<EditorBlock, { text: string }>, before: string, text: string, after: string) => {
     const current = blocksRef.current;
     const index = current.findIndex((item) => item.id === block.id);
     if (index === -1) return;
-    const merged = `${block.text.slice(0, start)}${text}${block.text.slice(end)}`.replace(/\r\n/g, "\n");
-    const lines = merged.split("\n");
-    const rich = lines.some((line) => /^(?:\\+|! |## |> |- )/.test(line.trim()));
-    if (block.type === "paragraph" && rich) {
-      const created = textToBlocks(merged).map((item) => fromBlog(item, uid()));
+    const pasted = text.replace(/\r\n/g, "\n");
+    const hasMarkers = pasted.split("\n").some((line) => /^(?:\\+|! |## |> |- )/.test(line.trim()));
+    if (block.type === "paragraph" && hasMarkers && !plainText(before) && !plainText(after)) {
+      const created = textToBlocks(pasted).map((item) => fromBlog(item, uid()));
       const next = current.slice();
       next.splice(index, 1, ...(created.length ? created : [fromBlog("", uid())]));
       const last = next[index + Math.max(created.length, 1) - 1];
       focusRef.current = fieldId(last);
+      caretRef.current = { id: fieldId(last), pos: "end" };
       setSelectedId(last.id);
       commit(next);
       return;
     }
+    const lines = `${before}${pasted}${after}`.split("\n");
     const [first, ...rest] = lines;
     const next = current.slice();
-    next[index] = { ...block, text: first };
+    next[index] = { ...block, text: joinAlign(splitAlign(block.text).align, first) };
     const extras = rest.filter((line) => line.trim()).map((line) => fromBlog(line, uid()));
     next.splice(index + 1, 0, ...extras);
     const last = extras.at(-1);
     if (last) {
       focusRef.current = fieldId(last);
-      caretRef.current = { id: fieldId(last), pos: last.type === "paragraph" ? last.text.length : 0 };
+      caretRef.current = { id: fieldId(last), pos: last.type === "list" || last.type === "image" ? 0 : textLength(last.text) };
       setSelectedId(last.id);
     } else {
       focusRef.current = fieldId(block);
-      caretRef.current = { id: fieldId(block), pos: first.length };
+      caretRef.current = { id: fieldId(block), pos: textLength(first) };
     }
     commit(next);
-  };
-
-  const onTextPaste = (event: React.ClipboardEvent<HTMLTextAreaElement>, block: Extract<EditorBlock, { text: string }>) => {
-    const files = [...event.clipboardData.files].filter((file) => file.type.startsWith("image/"));
-    if (files.length) {
-      event.preventDefault();
-      const index = blocksRef.current.findIndex((item) => item.id === block.id);
-      void addFiles(files, index + 1);
-      return;
-    }
-    const text = event.clipboardData.getData("text/plain");
-    if (!text.includes("\n")) return;
-    event.preventDefault();
-    pasteText(block, event.currentTarget.selectionStart, event.currentTarget.selectionEnd, text);
   };
 
   const updateItem = (id: string, itemIndex: number, text: string) => {
@@ -640,48 +627,51 @@ export default function StoryEditor({
     );
   };
 
-  const onItemKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>, block: Extract<EditorBlock, { type: "list" }>, itemIndex: number) => {
-    const field = event.currentTarget;
-    if (event.key === "Enter" && !event.shiftKey) {
-      event.preventDefault();
-      const items = block.items.slice();
-      const at = field.selectionStart;
-      const after = items[itemIndex].slice(at);
-      items[itemIndex] = items[itemIndex].slice(0, at);
-      items.splice(itemIndex + 1, 0, after);
-      focusRef.current = `field-${block.id}-${itemIndex + 1}`;
-      caretRef.current = { id: `field-${block.id}-${itemIndex + 1}`, pos: 0 };
-      commit(blocksRef.current.map((item) => (item.id === block.id ? { ...block, items } : item)));
-      return;
-    }
-    if (event.key !== "Backspace" || field.selectionStart !== 0 || field.selectionEnd !== 0) return;
-    if (block.items.length === 1 && !block.items[0]) {
-      event.preventDefault();
+  const splitItem = (block: Extract<EditorBlock, { type: "list" }>, itemIndex: number, before: string, after: string) => {
+    const items = block.items.slice();
+    items[itemIndex] = before;
+    items.splice(itemIndex + 1, 0, after);
+    focusRef.current = `field-${block.id}-${itemIndex + 1}`;
+    caretRef.current = { id: `field-${block.id}-${itemIndex + 1}`, pos: 0 };
+    commit(blocksRef.current.map((item) => (item.id === block.id ? { ...block, items } : item)));
+  };
+
+  const backspaceItem = (block: Extract<EditorBlock, { type: "list" }>, itemIndex: number) => {
+    if (block.items.length === 1 && !plainText(block.items[0] ?? "")) {
       const created = fromBlog("", uid());
       const next = blocksRef.current.map((item) => (item.id === block.id ? created : item));
       focusRef.current = fieldId(created);
       setSelectedId(created.id);
       commit(next);
-      return;
+      return true;
     }
-    if (!block.items[itemIndex] && block.items.length > 1) {
-      event.preventDefault();
+    if (!plainText(block.items[itemIndex] ?? "") && block.items.length > 1) {
       const items = block.items.filter((_, index) => index !== itemIndex);
       const focusIndex = Math.max(0, itemIndex - 1);
       focusRef.current = `field-${block.id}-${focusIndex}`;
-      caretRef.current = { id: `field-${block.id}-${focusIndex}`, pos: items[focusIndex]?.length ?? 0 };
+      caretRef.current = { id: `field-${block.id}-${focusIndex}`, pos: "end" };
       commit(blocksRef.current.map((item) => (item.id === block.id ? { ...block, items } : item)));
-      return;
+      return true;
     }
-    if (itemIndex === 0) return;
-    event.preventDefault();
+    if (itemIndex === 0) return false;
     const items = block.items.slice();
-    const pos = items[itemIndex - 1].length;
+    const pos = textLength(items[itemIndex - 1] ?? "");
     items[itemIndex - 1] += items[itemIndex];
     items.splice(itemIndex, 1);
     focusRef.current = `field-${block.id}-${itemIndex - 1}`;
     caretRef.current = { id: `field-${block.id}-${itemIndex - 1}`, pos };
     commit(blocksRef.current.map((item) => (item.id === block.id ? { ...block, items } : item)));
+    return true;
+  };
+
+  const pasteItemLines = (block: Extract<EditorBlock, { type: "list" }>, itemIndex: number, before: string, text: string, after: string) => {
+    const lines = `${before}${text.replace(/\r\n/g, "\n")}${after}`.split("\n");
+    const items = block.items.slice();
+    items.splice(itemIndex, 1, ...lines);
+    const last = itemIndex + lines.length - 1;
+    focusRef.current = `field-${block.id}-${last}`;
+    caretRef.current = { id: `field-${block.id}-${last}`, pos: textLength(lines.at(-1) ?? "") };
+    commit(blocksRef.current.map((entry) => (entry.id === block.id ? { ...block, items } : entry)));
   };
 
   const choosePhoto = (url: string) => {
@@ -774,6 +764,14 @@ export default function StoryEditor({
                     Remove
                   </button>
                 </div>
+                <FormatBar
+                  showAlign={block.type === "paragraph" || block.type === "heading" || block.type === "quote"}
+                  align={block.type === "paragraph" || block.type === "heading" || block.type === "quote" ? splitAlign(block.text).align : "left"}
+                  onAlign={(align) => {
+                    if (block.type !== "paragraph" && block.type !== "heading" && block.type !== "quote") return;
+                    updateText(block.id, joinAlign(align, splitAlign(block.text).body));
+                  }}
+                />
               </div>
             )}
 
@@ -783,18 +781,21 @@ export default function StoryEditor({
             >
               {block.type === "paragraph" || block.type === "heading" || block.type === "quote" ? (
                 <div className={block.type === "quote" ? "border-l-4 border-brand-500 py-1 pl-5" : undefined}>
-                  <GrowingField
+                  <RichField
                     id={fieldId(block)}
                     storyStart={index === 0}
+                    allowAlign
                     value={block.text}
                     ariaLabel={labelFor(block.type)}
                     placeholder={
                       block.type === "heading" ? "Add a heading" : block.type === "quote" ? "Add a quote" : "Type / to choose a block"
                     }
                     onChange={(text) => updateText(block.id, text)}
-                    onKeyDown={(event) => onTextKeyDown(event, block)}
-                    onPaste={(event) => onTextPaste(event, block)}
                     onFocus={() => setSelectedId(block.id)}
+                    onSplit={(before, after) => splitRich(block, before, after)}
+                    onBackspaceAtStart={() => backspaceText(block)}
+                    onPasteFiles={(files) => void addFiles(files, index + 1)}
+                    onPasteLines={(before, text, after) => pasteRichLines(block, before, text, after)}
                     className={
                       block.type === "heading"
                         ? "font-display text-2xl font-bold tracking-tight text-ink"
@@ -814,7 +815,7 @@ export default function StoryEditor({
                   {block.items.map((item, itemIndex) => (
                     <li key={`${block.id}-${itemIndex}`} className="flex gap-3">
                       <span className="mt-3 h-1.5 w-1.5 shrink-0 rounded-full bg-ink" />
-                      <GrowingField
+                      <RichField
                         id={`field-${block.id}-${itemIndex}`}
                         storyStart={index === 0 && itemIndex === 0}
                         value={item}
@@ -822,28 +823,10 @@ export default function StoryEditor({
                         placeholder="List item"
                         onChange={(text) => updateItem(block.id, itemIndex, text)}
                         onFocus={() => setSelectedId(block.id)}
-                        onKeyDown={(event) => onItemKeyDown(event, block, itemIndex)}
-                        onPaste={(event) => {
-                          const files = [...event.clipboardData.files].filter((file) => file.type.startsWith("image/"));
-                          if (files.length) {
-                            event.preventDefault();
-                            void addFiles(files, index + 1);
-                            return;
-                          }
-                          const text = event.clipboardData.getData("text/plain");
-                          if (!text.includes("\n")) return;
-                          event.preventDefault();
-                          const at = event.currentTarget.selectionStart;
-                          const end = event.currentTarget.selectionEnd;
-                          const merged = `${item.slice(0, at)}${text}${item.slice(end)}`.replace(/\r\n/g, "\n");
-                          const lines = merged.split("\n");
-                          const items = block.items.slice();
-                          items.splice(itemIndex, 1, ...lines);
-                          const last = itemIndex + lines.length - 1;
-                          focusRef.current = `field-${block.id}-${last}`;
-                          caretRef.current = { id: `field-${block.id}-${last}`, pos: lines.at(-1)?.length ?? 0 };
-                          commit(blocksRef.current.map((entry) => (entry.id === block.id ? { ...block, items } : entry)));
-                        }}
+                        onSplit={(before, after) => splitItem(block, itemIndex, before, after)}
+                        onBackspaceAtStart={() => backspaceItem(block, itemIndex)}
+                        onPasteFiles={(files) => void addFiles(files, index + 1)}
+                        onPasteLines={(before, text, after) => pasteItemLines(block, itemIndex, before, text, after)}
                         className="text-[1.0625rem] leading-[1.7] text-ink sm:text-lg"
                       />
                     </li>
@@ -854,7 +837,7 @@ export default function StoryEditor({
                   {block.src ? (
                     <img
                       src={block.src}
-                      alt={block.caption || ""}
+                      alt={plainText(block.caption)}
                       draggable={false}
                       className="mx-auto block h-auto w-auto max-h-[min(85vh,52rem)] max-w-full rounded-3xl object-contain"
                     />
@@ -880,7 +863,7 @@ export default function StoryEditor({
                       </div>
                     </div>
                   )}
-                  <GrowingField
+                  <RichField
                     id={fieldId(block)}
                     value={block.caption}
                     ariaLabel="Caption"
@@ -891,9 +874,7 @@ export default function StoryEditor({
                         blocksRef.current.map((entry) => (entry.id === block.id && entry.type === "image" ? { ...entry, caption } : entry)),
                       )
                     }
-                    onKeyDown={(event) => {
-                      if (event.key === "Enter") event.preventDefault();
-                    }}
+                    onPasteFiles={(files) => void addFiles(files, index + 1)}
                     className="mt-3 text-center text-sm text-slate"
                   />
                   {block.src && (

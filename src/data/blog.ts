@@ -1,3 +1,5 @@
+import { plainText } from "@/lib/cms/richText";
+
 /**
  * Blog posts for Elayono Global.
  *
@@ -78,11 +80,11 @@ export function readingMinutes(post: BlogPost): number {
   const text = [
     post.excerpt,
     ...post.body.map((block) => {
-      if (typeof block === "string") return block;
-      if ("heading" in block) return block.heading;
-      if ("quote" in block) return block.quote;
-      if ("list" in block) return block.list.join(" ");
-      return block.caption ?? "";
+      if (typeof block === "string") return plainText(block);
+      if ("heading" in block) return plainText(block.heading);
+      if ("quote" in block) return plainText(block.quote);
+      if ("list" in block) return block.list.map(plainText).join(" ");
+      return plainText(block.caption ?? "");
     }),
   ].join(" ");
   const words = text.trim().split(/\s+/).filter(Boolean).length;

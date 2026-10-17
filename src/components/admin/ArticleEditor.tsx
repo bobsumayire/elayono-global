@@ -3,11 +3,12 @@
 import Link from "next/link";
 import { useCallback, useRef, useState } from "react";
 import { textToBlocks } from "@/lib/cms/blocks";
+import { plainText } from "@/lib/cms/richText";
 import { slugify } from "@/lib/cms/schema";
 import StoryEditor, { GrowingField, type SelectedBlock, type StoryHandle } from "@/components/admin/StoryEditor";
 
 const blockCopy: Record<SelectedBlock["type"], string> = {
-  paragraph: "A paragraph of the article. Press Enter for a new one, or type / to insert a photo, heading, quote, or list.",
+  paragraph: "A paragraph of the article. Select words to bold, italicize, underline, link, or change the font and size. Press Enter for a new paragraph, or type / to insert a photo, heading, quote, or list.",
   heading: "A section title. It appears in the article the same way it does here.",
   quote: "A short quotation or scripture, set off from the paragraphs around it.",
   list: "A list of points. Press Enter to add the next item.",
@@ -22,7 +23,7 @@ function storyWords(title: string, excerpt: string, body: string) {
     if ("list" in block) return block.list;
     return block.caption ? [block.caption] : [];
   });
-  return [title, excerpt, ...readable].join(" ").trim().split(/\s+/).filter(Boolean).length;
+  return [title, excerpt, ...readable].map(plainText).join(" ").trim().split(/\s+/).filter(Boolean).length;
 }
 
 function readingLabel(words: number) {
