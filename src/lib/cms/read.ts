@@ -41,8 +41,13 @@ export async function getGallery() {
   return docs<GalleryImage>(await readCollection("gallery"));
 }
 
+function isSampleTestimony(testimony: Testimony) {
+  return testimony.quote.trim().startsWith("Sample testimony placeholder");
+}
+
 export async function getTestimonies() {
-  return docs<Testimony>(await readCollection("testimonies"));
+  const testimonies = docs<Testimony>(await readCollection("testimonies"));
+  return testimonies.filter((testimony) => !isSampleTestimony(testimony));
 }
 
 export async function getTestimonyVideos() {

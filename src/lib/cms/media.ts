@@ -1,8 +1,9 @@
-import { mkdir, readdir, unlink, writeFile } from "node:fs/promises";
+import { mkdir, readFile, readdir, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { platformEnv } from "@/lib/cms/store";
 
 const UPLOADS = path.join(process.cwd(), "public", "uploads");
+const SHARE_DIR = path.join(process.cwd(), ".data", "share");
 const TYPES: Record<string, string> = {
   "image/jpeg": "jpg",
   "image/png": "png",
@@ -60,6 +61,40 @@ export async function deleteMedia(key: string) {
   const env = await platformEnv();
   if (!env?.MEDIA) throw new Error("Media storage is not connected.");
   await env.MEDIA.delete(key);
+}
+
+function shareKey(slug: string, version: string) {
+  const key = `share-${slug}-${version}.jpg`;
+  return /^share-[a-z0-9.-]+$/.test(key) ? key : null;
+}
+
+export async function readShareJpeg(slug: string, version: string) {
+  const key = shareKey(slug, version);
+  if (!key) return null;
+  const env = await platformEnv();
+  if (env?.MEDIA) {
+    const object = await env.MEDIA.get(key);
+    if (!object) return null;
+    return new Uint8Array(await new Response(object.body).arrayBuffer());
+  }
+  try {
+    return new Uint8Array(await readFile(path.join(SHARE_DIR, key)));
+  } catch {
+    return null;
+  }
+}
+
+export async function writeShareJpeg(slug: string, version: string, bytes: Uint8Array) {
+  const key = shareKey(slug, version);
+  if (!key) return;
+  const env = await platformEnv();
+  if (env?.MEDIA) {
+    const body = bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) as ArrayBuffer;
+    await env.MEDIA.put(key, body, { httpMetadata: { contentType: "image/jpeg" } });
+    return;
+  }
+  await mkdir(SHARE_DIR, { recursive: true });
+  await writeFile(path.join(SHARE_DIR, key), Buffer.from(bytes));
 }
 
 export async function readMedia(key: string) {

@@ -22,3 +22,9 @@ export function articleShareSource(post: Pick<BlogPost, "image" | "body">) {
   }
   return SHARE_FALLBACK;
 }
+
+export function shareVersion(source: string) {
+  let hash = 0;
+  for (const char of source) hash = Math.imul(hash, 31) + char.charCodeAt(0);
+  return (hash >>> 0).toString(16);
+}

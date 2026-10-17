@@ -46,13 +46,15 @@ export default async function TestimoniesPage() {
         </div>
       </section>
 
-      <section className="pb-20 sm:pb-28">
-        <div className="container-elayono grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {testimonies.map((t, i) => (
-            <TestimonyCard key={i} testimony={t} />
-          ))}
-        </div>
-      </section>
+      {testimonies.length > 0 && (
+        <section className="pb-20 sm:pb-28">
+          <div className="container-elayono grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {testimonies.map((t, i) => (
+              <TestimonyCard key={i} testimony={t} />
+            ))}
+          </div>
+        </section>
+      )}
 
       <CTASection
         eyebrow="Share Your Story"

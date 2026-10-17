@@ -158,28 +158,29 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Testimonies */}
-      <section className="py-20 sm:py-28">
-        <div className="container-elayono flex flex-col gap-10">
-          <SectionHeading
-            eyebrow="Testimonies"
-            title="Lives Being Transformed"
-            align="center"
-            description="Stories from across our global family of what God is doing through Elayono Global."
-            className="mx-auto text-center"
-          />
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {testimonies.map((t, i) => (
-              <TestimonyCard key={i} testimony={t} />
-            ))}
+      {testimonies.length > 0 && (
+        <section className="py-20 sm:py-28">
+          <div className="container-elayono flex flex-col gap-10">
+            <SectionHeading
+              eyebrow="Testimonies"
+              title="Lives Being Transformed"
+              align="center"
+              description="Stories from across our global family of what God is doing through Elayono Global."
+              className="mx-auto text-center"
+            />
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {testimonies.map((t, i) => (
+                <TestimonyCard key={i} testimony={t} />
+              ))}
+            </div>
+            <div className="mx-auto">
+              <Button href="/testimonies" variant="ghost">
+                Read More Testimonies
+              </Button>
+            </div>
           </div>
-          <div className="mx-auto">
-            <Button href="/testimonies" variant="ghost">
-              Read More Testimonies
-            </Button>
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Give CTA */}
       <CTASection
