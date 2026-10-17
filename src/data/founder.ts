@@ -1,9 +1,9 @@
 export const founder = {
   name: "Rev Prophet Ernest NYIRINDEKWE",
   title: "Founder & Visionary, Elayono Global",
-  /** Initials shown on the placeholder portrait until a real photo is supplied. */
+  /** Initials shown only if the portrait file is missing. */
   initials: "EN",
-  portrait: "",
+  portrait: "/photos/founder-ernest.jpg",
   shortBio:
     "Rev Prophet Ernest NYIRINDEKWE is the Founder and Visionary of Elayono Global, an international Christian ministry raising altars of worship, discipleship and transformation across nations.",
   /**

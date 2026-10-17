@@ -63,7 +63,9 @@ export async function getMinistries() {
 
 export async function getFounder() {
   const doc = await readDocument("founder", "main");
-  return (doc as typeof founderSeed | null) ?? founderSeed;
+  if (!doc) return founderSeed;
+  const saved = doc as typeof founderSeed;
+  return { ...founderSeed, ...saved, portrait: saved.portrait || founderSeed.portrait };
 }
 
 export async function getSite(): Promise<SiteSettings> {
