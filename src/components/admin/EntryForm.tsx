@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { removeEntry, saveEntry, uploadImage } from "@/lib/cms/actions";
 import { slugify, type ClientCollection } from "@/lib/cms/schema";
+import ArticleEditor from "@/components/admin/ArticleEditor";
 import StoryEditor from "@/components/admin/StoryEditor";
 
 export default function EntryForm({
@@ -57,6 +58,37 @@ export default function EntryForm({
     }
     set(key, result.url);
   };
+
+  if (schema.name === "blog") {
+    const category = schema.fields.find((field) => field.key === "category");
+    const cover = schema.fields.find((field) => field.key === "image");
+    return (
+      <ArticleEditor
+        values={values}
+        set={set}
+        error={error}
+        saved={saved}
+        pending={pending}
+        photos={photos}
+        originalId={originalId}
+        categoryOptions={category?.options ?? ["News", "Article"]}
+        coverHelp={cover?.help}
+        onSubmit={onSubmit}
+        onError={setError}
+        onDelete={
+          originalId === "new"
+            ? undefined
+            : async () => {
+                if (!confirm("Delete this article? It will disappear from the website.")) return;
+                await removeEntry(schema.name, originalId);
+                router.refresh();
+              }
+        }
+        uploadingCover={uploading === "image"}
+        onUploadCover={(file) => upload("image", file)}
+      />
+    );
+  }
 
   return (
     <form onSubmit={onSubmit} className="flex max-w-3xl flex-col gap-5">

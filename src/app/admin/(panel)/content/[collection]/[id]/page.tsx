@@ -20,6 +20,11 @@ export default async function EntryPage({
   const doc = id === "new" ? null : await readDocument(schema.name, id);
   if (id !== "new" && !doc) notFound();
   const photos = schema.name === "blog" ? await listMedia() : [];
+  const form = (
+    <EntryForm schema={clientSchema(schema)} initial={documentToForm(schema, doc)} originalId={id} saved={saved === "1"} photos={photos} />
+  );
+
+  if (schema.name === "blog") return form;
 
   return (
     <div className="mx-auto flex max-w-5xl flex-col gap-6">
@@ -28,10 +33,10 @@ export default async function EntryPage({
           ← {schema.label}
         </Link>
         <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-ink">
-          {id === "new" ? `New ${schema.label === "Blog" ? "article" : "entry"}` : String(doc?.[schema.titleKey] ?? "Edit")}
+          {id === "new" ? "New entry" : String(doc?.[schema.titleKey] ?? "Edit")}
         </h1>
       </div>
-      <EntryForm schema={clientSchema(schema)} initial={documentToForm(schema, doc)} originalId={id} saved={saved === "1"} photos={photos} />
+      {form}
     </div>
   );
 }

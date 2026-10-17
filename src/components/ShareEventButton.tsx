@@ -9,6 +9,8 @@ type Props = {
   path: string;
   /** Event cards open the menu upward. Pages with room below can open it downward. */
   menuDirection?: "up" | "down";
+  /** Smaller control for a byline row. */
+  compact?: boolean;
 };
 
 type Platform = {
@@ -48,7 +50,7 @@ const platforms: Platform[] = [
   },
 ];
 
-export default function ShareEventButton({ title, text, path, menuDirection = "up" }: Props) {
+export default function ShareEventButton({ title, text, path, menuDirection = "up", compact = false }: Props) {
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const [canNativeShare, setCanNativeShare] = useState(false);
@@ -111,7 +113,11 @@ export default function ShareEventButton({ title, text, path, menuDirection = "u
         aria-haspopup="menu"
         aria-expanded={open}
         aria-label={`Share ${title}`}
-        className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-line bg-white px-5 py-2.5 text-sm font-semibold text-ink transition-colors hover:border-brand-500 hover:text-brand-600"
+        className={
+          compact
+            ? "inline-flex items-center justify-center gap-1.5 rounded-md border border-line bg-white px-3 py-1.5 text-sm font-medium text-ink transition-colors hover:border-brand-500 hover:text-brand-600"
+            : "inline-flex w-full items-center justify-center gap-2 rounded-full border border-line bg-white px-5 py-2.5 text-sm font-semibold text-ink transition-colors hover:border-brand-500 hover:text-brand-600"
+        }
       >
         <ShareIcon /> Share
       </button>
@@ -119,7 +125,9 @@ export default function ShareEventButton({ title, text, path, menuDirection = "u
       {open && (
         <div
           className={`absolute z-10 animate-fade-in rounded-2xl border border-line bg-white p-2 shadow-xl shadow-ink/5 ${
-            menuDirection === "down" ? "left-0 top-full mt-2 w-60" : "inset-x-0 bottom-full mb-2"
+            menuDirection === "down"
+              ? `${compact ? "right-0" : "left-0"} top-full mt-2 w-60`
+              : "inset-x-0 bottom-full mb-2"
           }`}
         >
           <p className="px-3 pb-1 pt-1 text-[11px] font-semibold uppercase tracking-wide text-slate">

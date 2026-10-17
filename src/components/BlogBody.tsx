@@ -3,7 +3,7 @@ import type { BlogBlock } from "@/data/blog";
 
 export default function BlogBody({ blocks }: { blocks: BlogBlock[] }) {
   return (
-    <div className="flex flex-col gap-5 text-base leading-relaxed text-ink/80 sm:text-lg">
+    <div className="flex flex-col gap-6 text-[1.0625rem] leading-[1.7] text-ink sm:text-lg">
       {blocks.map((block, index) => {
         if (typeof block === "string") {
           return <p key={index}>{block}</p>;

@@ -5,7 +5,7 @@ import BlogBody from "@/components/BlogBody";
 import BlogCard from "@/components/BlogCard";
 import ContentImage from "@/components/ContentImage";
 import ShareEventButton from "@/components/ShareEventButton";
-import { categoryLabel, formatBlogDate, postAuthor, readingMinutes } from "@/data/blog";
+import { categoryLabel, formatBlogDate, postAuthor } from "@/data/blog";
 import { getPublishedPost, getPublishedPosts } from "@/lib/cms/read";
 import { shareImageUrl } from "@/lib/share";
 import { siteConfig } from "@/lib/site";
@@ -59,38 +59,44 @@ export default async function BlogArticlePage({
     .slice(0, 3);
 
   return (
-    <article className="py-16 sm:py-24">
-      <div className="container-elayono max-w-3xl">
-        <Link href="/blog" className="text-sm font-semibold text-brand-600 hover:underline">
-          &larr; Back to the blog
-        </Link>
-        <span className="mt-6 block text-xs font-semibold uppercase tracking-[0.2em] text-brand-500">
-          {categoryLabel(post.category)}
-        </span>
-        <h1 className="mt-3 text-balance text-3xl font-extrabold tracking-tight text-ink sm:text-5xl">
-          {post.title}
-        </h1>
-        <p className="mt-4 text-sm text-slate">
-          {postAuthor(post)} · {formatBlogDate(post.date)} · {readingMinutes(post)} min read
-        </p>
-        <div className="mt-6 w-fit">
-          <ShareEventButton
-            title={post.title}
-            text={post.excerpt}
-            path={`/blog/${post.slug}`}
-            menuDirection="down"
-          />
-        </div>
+    <article className="bg-white py-8 sm:py-12">
+      <div className="container-elayono">
+        <div className="mx-auto max-w-3xl">
+          <Link href="/blog" className="text-sm font-semibold text-brand-600 hover:underline">
+            &larr; Blog
+          </Link>
+          <h1 className="mt-5 text-balance text-3xl font-bold leading-[1.15] tracking-tight text-ink sm:text-[2.5rem]">
+            {post.title}
+          </h1>
+          <div className="mt-4 flex items-start justify-between gap-4">
+            <div>
+              <p className="text-sm text-slate">
+                {categoryLabel(post.category)} · {formatBlogDate(post.date)}
+              </p>
+              <p className="mt-1 text-sm font-bold text-ink">{postAuthor(post)}</p>
+            </div>
+            <ShareEventButton
+              title={post.title}
+              text={post.excerpt}
+              path={`/blog/${post.slug}`}
+              menuDirection="down"
+              compact
+            />
+          </div>
 
-        {post.image && (
-          <figure className="mt-8">
-            <ContentImage src={post.image} alt="" fit="natural" className="rounded-3xl" priority />
-          </figure>
-        )}
+          {post.image && (
+            <figure className="mt-5">
+              <ContentImage src={post.image} alt={post.title} fit="full" priority />
+            </figure>
+          )}
 
-        <p className="mt-10 text-xl leading-relaxed text-ink">{post.excerpt}</p>
-        <div className="mt-8">
-          <BlogBody blocks={post.body} />
+          <div className="mt-8">
+            {post.body.length > 0 ? (
+              <BlogBody blocks={post.body} />
+            ) : (
+              <p className="text-lg leading-[1.7] text-ink">{post.excerpt}</p>
+            )}
+          </div>
         </div>
       </div>
 

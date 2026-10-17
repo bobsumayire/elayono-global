@@ -53,7 +53,7 @@ export const collections: CollectionSchema[] = [
         key: "body",
         label: "Story",
         type: "blocks",
-        help: "Blank line between paragraphs. Start a line with ## for a heading, > for a quote, or - for a list item. Use Add photo to place pictures in the story.",
+        help: "Write the article on the page. Add a photo, heading, quote, or list where it should appear. Photos show in the article while you write.",
       },
     ],
     blank: () => ({
