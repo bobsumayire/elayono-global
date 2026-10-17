@@ -115,14 +115,14 @@ function d1Store(db: ContentDatabase): Store {
   };
 }
 
+const DOCUMENTS_TABLE =
+  "CREATE TABLE IF NOT EXISTS documents (collection TEXT NOT NULL, id TEXT NOT NULL, data TEXT NOT NULL, updated_at TEXT NOT NULL, PRIMARY KEY (collection, id))";
+
 async function prepareDatabase(db: ContentDatabase) {
-  await db.exec(`CREATE TABLE IF NOT EXISTS documents (
-    collection TEXT NOT NULL,
-    id TEXT NOT NULL,
-    data TEXT NOT NULL,
-    updated_at TEXT NOT NULL,
-    PRIMARY KEY (collection, id)
-  )`);
+  // D1's exec() splits on newlines and then runs each line as its own statement,
+  // so a multiline CREATE TABLE arrives as "CREATE TABLE ... (" and fails with
+  // "incomplete input". A single prepared statement avoids that splitter.
+  await db.prepare(DOCUMENTS_TABLE).run();
 }
 
 let ready: Promise<Store> | null = null;
