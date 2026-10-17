@@ -1,24 +1,25 @@
 import { ImageResponse } from "next/og";
 import { readShareJpeg, writeShareJpeg } from "@/lib/cms/media";
-import { shareVersion } from "@/lib/share";
+import { shareImageId } from "@/lib/share";
 import { loadArticlePhoto } from "@/lib/sharePhoto";
-import { pngToJpeg } from "@/lib/shareJpeg";
+import { coverPosition, pngToJpeg } from "@/lib/shareJpeg";
 
 const size = { width: 1200, height: 630 };
 
 export async function ensureShareJpeg(slug: string, source: string) {
-  const version = shareVersion(source);
-  const cached = await readShareJpeg(slug, version);
-  if (cached) return { version, bytes: cached };
+  const id = shareImageId(slug, source);
+  const cached = await readShareJpeg(id);
+  if (cached) return { id, bytes: cached };
 
   const photo = await loadArticlePhoto(source);
-  const png = await new ImageResponse(<ShareCard photo={photo} />, { ...size }).arrayBuffer();
+  const position = photo ? coverPosition(photo) : "center";
+  const png = await new ImageResponse(<ShareCard photo={photo} position={position} />, { ...size }).arrayBuffer();
   const bytes = pngToJpeg(png);
-  await writeShareJpeg(slug, version, bytes);
-  return { version, bytes };
+  await writeShareJpeg(id, bytes);
+  return { id, bytes };
 }
 
-function ShareCard({ photo }: { photo: string | null }) {
+function ShareCard({ photo, position }: { photo: string | null; position: string }) {
   return (
     <div
       style={{
@@ -29,7 +30,15 @@ function ShareCard({ photo }: { photo: string | null }) {
         background: "#0b2a1f",
       }}
     >
-      {photo ? <img src={photo} alt="" width={1200} height={630} style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : null}
+      {photo ? (
+        <img
+          src={photo}
+          alt=""
+          width={1200}
+          height={630}
+          style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: position }}
+        />
+      ) : null}
       <div
         style={{
           position: "absolute",

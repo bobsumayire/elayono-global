@@ -9,6 +9,7 @@ import type { TestimonyVideo } from "@/data/testimonyVideos";
 import { siteConfig, type SiteSettings } from "@/lib/site";
 import { founder as founderSeed } from "@/data/founder";
 import { readCollection, readDocument } from "@/lib/cms/store";
+import { sharePageId } from "@/lib/share";
 
 function docs<T>(rows: { data: Record<string, unknown> }[]) {
   return rows.map((row) => row.data as T);
@@ -25,6 +26,11 @@ export async function getPublishedPosts() {
 
 export async function getPublishedPost(slug: string) {
   return (await getPublishedPosts()).find((post) => post.slug === slug) ?? null;
+}
+
+export async function getPublishedPostBySharePage(id: string) {
+  if (!/^[a-f0-9]+$/.test(id)) return null;
+  return (await getPublishedPosts()).find((post) => sharePageId(post.slug) === id) ?? null;
 }
 
 export async function getEvents() {

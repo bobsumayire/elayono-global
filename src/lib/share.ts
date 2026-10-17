@@ -28,3 +28,21 @@ export function shareVersion(source: string) {
   for (const char of source) hash = Math.imul(hash, 31) + char.charCodeAt(0);
   return (hash >>> 0).toString(16);
 }
+
+/** Short id for /i/{id}.jpg. WhatsApp only attaches a photo when the address ends in .jpg. */
+export function shareImageId(slug: string, source: string) {
+  return shareVersion(`${slug}\n${source}`);
+}
+
+export function shareImagePath(id: string) {
+  return `/i/${id}.jpg`;
+}
+
+/** Stable address for a share. WhatsApp remembers each address, so this one is separate from the article page. */
+export function sharePageId(slug: string) {
+  return shareVersion(`page:${slug}`);
+}
+
+export function sharePagePath(slug: string) {
+  return `/s/${sharePageId(slug)}`;
+}

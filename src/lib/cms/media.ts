@@ -63,13 +63,13 @@ export async function deleteMedia(key: string) {
   await env.MEDIA.delete(key);
 }
 
-function shareKey(slug: string, version: string) {
-  const key = `share-${slug}-${version}.jpg`;
-  return /^share-[a-z0-9.-]+$/.test(key) ? key : null;
+function shareKey(id: string) {
+  const key = `i-${id}.jpg`;
+  return /^i-[a-f0-9]+\.jpg$/.test(key) ? key : null;
 }
 
-export async function readShareJpeg(slug: string, version: string) {
-  const key = shareKey(slug, version);
+export async function readShareJpeg(id: string) {
+  const key = shareKey(id);
   if (!key) return null;
   const env = await platformEnv();
   if (env?.MEDIA) {
@@ -84,8 +84,8 @@ export async function readShareJpeg(slug: string, version: string) {
   }
 }
 
-export async function writeShareJpeg(slug: string, version: string, bytes: Uint8Array) {
-  const key = shareKey(slug, version);
+export async function writeShareJpeg(id: string, bytes: Uint8Array) {
+  const key = shareKey(id);
   if (!key) return;
   const env = await platformEnv();
   if (env?.MEDIA) {

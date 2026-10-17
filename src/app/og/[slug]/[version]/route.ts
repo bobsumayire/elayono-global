@@ -1,6 +1,7 @@
 import { getPublishedPost } from "@/lib/cms/read";
 import { ensureShareJpeg } from "@/lib/shareCard";
-import { articleShareSource, shareVersion } from "@/lib/share";
+import { articleShareSource, shareImagePath, shareImageId, shareVersion } from "@/lib/share";
+import { siteConfig } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
@@ -12,12 +13,6 @@ export async function GET(_request: Request, { params }: { params: Promise<{ slu
   const source = articleShareSource(post);
   if (version !== shareVersion(source)) return new Response("Not found", { status: 404 });
 
-  const { bytes } = await ensureShareJpeg(slug, source);
-  return new Response(Buffer.from(bytes), {
-    headers: {
-      "Content-Type": "image/jpeg",
-      "Content-Length": String(bytes.byteLength),
-      "Cache-Control": "public, max-age=31536000, immutable",
-    },
-  });
+  await ensureShareJpeg(slug, source);
+  return Response.redirect(new URL(shareImagePath(shareImageId(slug, source)), siteConfig.url), 301);
 }

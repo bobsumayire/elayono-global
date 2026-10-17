@@ -70,8 +70,27 @@ globalThis.fetch = async (input, init) => {
   return nativeFetch(input, init);
 };
 
+async function shareJpeg(request, env) {
+  if (request.method !== "GET" || !env?.MEDIA) return null;
+  const match = new URL(request.url).pathname.match(/^\/i\/([a-f0-9]+)\.jpg$/);
+  if (!match) return null;
+  const object = await env.MEDIA.get(`i-${match[1]}.jpg`);
+  if (!object) return null;
+  const bytes = await object.arrayBuffer();
+  return new Response(bytes, {
+    headers: {
+      "Content-Type": "image/jpeg",
+      "Content-Length": String(bytes.byteLength),
+      "Cache-Control": "public, max-age=31536000, immutable",
+      "X-Content-Type-Options": "nosniff",
+    },
+  });
+}
+
 export default {
-  fetch(request, env, ctx) {
+  async fetch(request, env, ctx) {
+    const image = await shareJpeg(request, env);
+    if (image) return image;
     return requestContext.run({ env, ctx }, () => worker.fetch(withPublicHost(request), env, ctx));
   },
 };
